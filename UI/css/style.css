@@ -12,7 +12,7 @@ a {
 a:hover,
 a:active,
 a:focus {
-  color: #0b6bd3;
+  color: #1ebe09af;
   outline: none;
   text-decoration: none;
 }
@@ -22,4 +22,10 @@ a:focus {
 #inpt_srch{
     background-color: #05200294;
     color: aliceblue;
+}
+#btn_search{
+    border-top-right-radius: 20%;
+    border-bottom-right-radius: 20%;
+    background-color: #1ebe09af;
+
 }
