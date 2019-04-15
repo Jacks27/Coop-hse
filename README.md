@@ -1,4 +1,4 @@
-# Cooparative bank Housing
+# Cooperative bank Housing
 ## This is an informational website 
 
 
