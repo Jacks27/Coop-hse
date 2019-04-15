@@ -5,7 +5,7 @@ body {
   }
 
 a {
-    color: aliceblue;
+    color: rgb(7, 184, 21);
     transition: 0.5s;
   }
 
@@ -28,4 +28,207 @@ a:focus {
     border-bottom-right-radius: 20%;
     background-color: #1ebe09af;
 
+}
+#intro {
+  width: 100%;
+  position: relative;
+  background-color: #137c059f; 
+  background-size: cover;
+  padding: 200px 0 120px 0;
+}
+
+#intro .intro-img {
+  width: 50%;
+  float: right;
+}
+
+#intro .intro-info {
+  width: 50%;
+  float: left;
+}
+
+#intro .intro-info h2 {
+  color: #fff;
+  margin-bottom: 40px;
+  font-size: 48px;
+  font-weight: 700;
+}
+
+#intro .intro-info h2 span {
+  color: #74b5fc;
+  text-decoration: underline;
+}
+
+#intro .intro-info .btn-get-started,
+#intro .intro-info .btn-services {
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  display: inline-block;
+  padding: 10px 32px;
+  border-radius: 50px;
+  transition: 0.5s;
+  margin: 0 20px 20px 0;
+  color: #fff;
+}
+
+#intro .intro-info .btn-get-started {
+  background: #007bff;
+  border: 2px solid #007bff;
+  color: #fff;
+}
+
+#intro .intro-info .btn-get-started:hover {
+  background: none;
+  border-color: #fff;
+  color: #fff;
+}
+
+#intro .intro-info .btn-services {
+  border: 2px solid #fff;
+}
+
+#intro .intro-info .btn-services:hover {
+  background: #007bff;
+  border-color: #007bff;
+  color: #fff;
+}
+/* About Us Section
+--------------------------------*/
+
+#about {
+  background: #fff;
+  padding: 60px 0;
+}
+
+#about .about-container .background {
+  margin: 20px 0;
+}
+
+#about .about-container .content {
+  background: #fff;
+}
+
+#about .about-container .title {
+  color: #333;
+  font-weight: 700;
+  font-size: 32px;
+}
+
+#about .about-container p {
+  line-height: 26px;
+}
+
+#about .about-container p:last-child {
+  margin-bottom: 0;
+}
+
+#about .about-container .icon-box {
+  background: #fff;
+  background-size: cover;
+  padding: 0 0 30px 0;
+}
+
+#about .about-container .icon-box .icon {
+  float: left;
+  background: #fff;
+  width: 64px;
+  height: 64px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  text-align: center;
+  border-radius: 50%;
+  border: 2px solid #007bff;
+  transition: all 0.3s ease-in-out;
+}
+
+#about .about-container .icon-box .icon i {
+  color: #007bff;
+  font-size: 24px;
+}
+
+#about .about-container .icon-box:hover .icon {
+  background: #007bff;
+}
+
+#about .about-container .icon-box:hover .icon i {
+  color: #fff;
+}
+
+#about .about-container .icon-box .title {
+  margin-left: 80px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  font-size: 18px;
+}
+
+#about .about-container .icon-box .title a {
+  color: #283d50;
+}
+
+#about .about-container .icon-box .description {
+  margin-left: 80px;
+  line-height: 24px;
+  font-size: 14px;
+}
+
+#about .about-extra {
+  padding-top: 60px;
+}
+
+#about .about-extra h4 {
+  font-weight: 600;
+  font-size: 24px;
+}
+.section-header h3 {
+  font-size: 36px;
+  color: #283d50;
+  text-align: center;
+  font-weight: 500;
+  position: relative;
+}
+.section-header p {
+  text-align: center;
+  margin: auto;
+  font-size: 15px;
+  padding-bottom: 60px;
+  color: #556877;
+  width: 50%;
+}
+.back-to-top {
+  position: fixed;
+  display: none;
+  background: #007bff;
+  color: #fff;
+  width: 44px;
+  height: 44px;
+  text-align: center;
+  line-height: 1;
+  font-size: 16px;
+  border-radius: 50%;
+  right: 15px;
+  bottom: 15px;
+  transition: background 0.5s;
+  z-index: 11;
+}
+
+#header.header-pages {
+  height: 60px;
+  padding: 10px 0;
 }
