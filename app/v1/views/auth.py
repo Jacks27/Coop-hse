@@ -5,6 +5,7 @@ from app.v1.models.auth_model import UserModel
 from app.v1.views.validate import Validate
 from app.v1.views import BaseView
 
+
 def signup():
     """create useer account  """
     datadict = BaseView.get_jsondata()
@@ -24,13 +25,13 @@ def signup():
     id = UM.insert_data(UM.firstname, UM.lastname, UM.othername,\
     UM.phonenumber, UM.email, UM.passporturlstring, hashedpass)
     
-    res  = jsonify({"status": 200, 'data': id})
-    return  make_response(res, 200)
+    res  = jsonify({"status": 201, 'data': id})
+    return  make_response(res, 201)
 
 def hash_password(password):
     """ password hashing
 
-    Arguments:
+    Arguments:dd
         password {[str]} -- [the string to Hash]
 
     Returns:
