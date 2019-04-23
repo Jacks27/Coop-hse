@@ -1,0 +1,9 @@
+venv/
+*.pyc
+__pycache__
+.coverage
+.coveralls.yml
+.coveralls.yml
+.vscode/
+codet.py
+app
