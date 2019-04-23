@@ -120,6 +120,12 @@ class BaseModel(metaclass=BaseModelMeta):
     colomn_name = None
     primary_key = 'id'
     sub_set_cols = [primary_key]
+    id = None
+    select_query = """SELECT * FROM {}""".format(table_name)
+    where_clause = ''
+    compiled_select = ""
+    column_names = []
+
 
 
     
@@ -131,6 +137,19 @@ class BaseModel(metaclass=BaseModelMeta):
         BaseModel.query_excute(query)
         result = self.cursor.fetchone()
         return result
+    def select(self, fields=[]):
+        """Builds the select part of the query
+        Keyword Arguments:
+            fields {str} -- [fields to select] (default: {"*"})
+            fields {List} -- [fields to select])
+        """
+        if len(fields) > 0:
+            formated_fields = ",".join(fields)
+            self.select_query = """SELECT {} FROM {}""".format(
+                formated_fields, self.table_name)
+        else:
+            self.select_query = """SELECT * FROM {}""".format(self.table_name)
+        return self
     
     def insert_data(self, *args):
         
@@ -142,14 +161,18 @@ class BaseModel(metaclass=BaseModelMeta):
         query ="""INSERT INTO {} ({}) VALUES({}) RETURNING {}"""\
             .format(self.table_name, ', '.join(self.tbl_colomns), \
                 values,', '.join(self.sub_set_cols) )
-        print(query)
+        BaseModel.query_excute(query, True)
         try:
-            BaseModel.query_excute(query, True)
+            
             result = self.cursor.fetchone()
-            return result
+            if result is not None:
+                self.id = result[self.primary_key]
+                self.add_result_to_self(result)
+
+
         except psycopg2.ProgrammingError as errorx:
+            result=None
             self.errors.append(errorx)
-            print(errorx)
     @classmethod
     def query_excute(cls, query, commit=False):
         try:
@@ -167,3 +190,129 @@ class BaseModel(metaclass=BaseModelMeta):
             msg ="The flowing following fields are missing{}".format(''.join(fields))
             from_setter(msg)
 
+    def where(self, where_dict, operator="AND"):
+        """sets the where clause for select,delete and update queries
+            Arguments:whereDict {[dict()]} -- [fieldname:value,
+             fieldname !=: value,
+             fieldname >=: value ]
+        """
+        special_chars = r'[><=!]'
+        clause = ""
+        if "WHERE" not in self.where_clause:
+            clause = "WHERE"
+        count = 0
+        if bool(re.search(special_chars, self.where_clause)) is True:
+            count = 2
+        for key, value in where_dict.items():
+            count += 1
+            comparison = '='
+            if bool(re.search(special_chars, key)) is True:
+                comparison = ''
+            if count == 1:
+                clause += " {}{}'{}'".format(key, comparison, value)
+            else:
+                clause += " {} {}{}'{}'". format(operator,
+                                                 key, comparison, value)
+        self.where_clause += clause
+        return self.where_clause
+
+    def get(self, single=True,  number="all",):
+        """Builds and executes the select querry
+        """
+        query = self.compile_select()
+        self.query_excute(query)
+        self.where_clause = ''
+        if single is True:
+            try:
+                result = self.cursor.fetchone()
+                if result is not None:
+                    self.id = result[self.primary_key]
+                    self.add_result_to_self(result)
+            except psycopg2.ProgrammingError as errorx:
+                result = None
+                self.errors.append(errorx)
+        elif type(number) == int:
+            result = self.cursor.fetchmany(number)
+        else:
+            result = self.cursor.fetchall()
+        return result
+
+    def get_one(self, id):
+        """Creates self variables with data from db  """
+        self.where({self.primary_key: id})
+        query = self.compile_select()
+        self.query_excute(query)
+        self.where_clause = ''
+        try:
+            result = self.cursor.fetchone()
+            if result:
+                self.id = result[self.primary_key]
+                self.add_result_to_self(result)
+        except psycopg2.ProgrammingError as errorx:
+            result = None
+            self.errors.append(errorx)
+        return result
+
+
+    def check_exist(self):
+
+        """Check if a record exists
+        Returns:
+            [type] -- [description]
+        """
+        if self.where_clause != '' and self.get() is None:
+            status = False
+        else:
+            status = True
+
+        return status
+    def compile_select(self):
+        """compiles the select querry
+        """
+        if self.select_query:
+            query = self.select_query
+        else:
+            query = self.select()
+        if self.where_clause != '' and "WHERE" in self.where_clause:
+            query += ' ' + self.where_clause
+        self.compiled_select = query
+
+        return self.compiled_select
+    def add_result_to_self(self, result={}):
+        """Adds a dictionary to self as a valiable
+        Keyword Arguments:
+            result {dict} -- [description] (default: {{}})
+        """
+        self.__dict__.update(result)
+    def delete(self, id=None):
+        """Deletes an item from the db
+
+        Arguments:
+            id {[type]} -- [description]
+        """
+        if id is None and self.where_clause == '':
+            return False
+        self.where({self.primary_key: id})
+        query = "DELETE FROM {} ".format(self.table_name)
+        query += self.where_clause
+        self.query_excute(query, True)
+    def sub_set(self, list_to_get=None):
+        """gets a dictinary with the fields in the list_to_get
+        Keyword Arguments:
+            list_to_get {list} -- [description] (default: {[]})
+        Returns: [dict] -- [subset of self]
+        """
+        if list_to_get is None:
+            list_to_get = self.sub_set_cols
+        list_to_get = [x.lower() for x in list_to_get]
+        # convert all fields to lower case
+
+        sub_set = dict.fromkeys(list_to_get, None)
+        #  fields:None
+
+        for key, value in self.__dict__.items():
+            # displays class's namespace
+            if key in list_to_get:
+
+                sub_set[key] = value
+        return sub_set
