@@ -13,5 +13,3 @@ class UsersModel(BaseModel):
     password = SizedString(minlen=8)
     tbl_colomns = ["firstname", "lastname", "othername", "email", "phonenumber", "passporturlstring", "password"] 
     table_name = 'users'
-
-  

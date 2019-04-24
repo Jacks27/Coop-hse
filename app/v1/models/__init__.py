@@ -14,7 +14,7 @@ def _make_setter(dcls):
 	for d in dcls.__mro__: #walk MRO and collect output of set_code()
 		if 'set_code' in d.__dict__: #if true
 			for line in d.set_code():# line in return function
-	 			code += '	' + line + '\n' #append the lines to code 
+	 			code += '	' + line + '\n' #append the lines to code
 	return code
 def _make_init(fields):
     code = 'def __init__(self, %s):\n'%','.join(fields)#assign the fields to the place holders
@@ -121,15 +121,18 @@ class BaseModel(metaclass=BaseModelMeta):
     primary_key = 'id'
     sub_set_cols = [primary_key]
     id = None
-    select_query = """SELECT * FROM {}""".format(table_name)
-    where_clause = ''
     compiled_select = ""
-    column_names = []
+   
 
 
 
-    
-               
+    def __init__(self, *args, **kwargs):
+        self.select_query = """SELECT * FROM {}""".format(self.table_name)
+        self.where_clause = ''
+        self.compiled_select = ""
+        self.column_names = []
+        self.clean_insert_dict()
+        super().__init__()
     def get_record(self):
         """get a rows from the db table"""
     
@@ -158,10 +161,12 @@ class BaseModel(metaclass=BaseModelMeta):
             val = "'{}'".format(item)
             list_vals.append(val)
         values = ', '.join(list_vals)
+        
         query ="""INSERT INTO {} ({}) VALUES({}) RETURNING {}"""\
             .format(self.table_name, ', '.join(self.tbl_colomns), \
                 values,', '.join(self.sub_set_cols) )
-        BaseModel.query_excute(query, True)
+        print('query is -____________________>', query)
+        self.query_excute(query, True)
         try:
             
             result = self.cursor.fetchone()
@@ -220,12 +225,16 @@ class BaseModel(metaclass=BaseModelMeta):
         """Builds and executes the select querry
         """
         query = self.compile_select()
+        print('____________________________>', query)
         self.query_excute(query)
         self.where_clause = ''
         if single is True:
             try:
                 result = self.cursor.fetchone()
+                print('_________________',result)
+                
                 if result is not None:
+                    print('_________________',self.id)
                     self.id = result[self.primary_key]
                     self.add_result_to_self(result)
             except psycopg2.ProgrammingError as errorx:
@@ -278,12 +287,14 @@ class BaseModel(metaclass=BaseModelMeta):
         self.compiled_select = query
 
         return self.compiled_select
+        
     def add_result_to_self(self, result={}):
         """Adds a dictionary to self as a valiable
         Keyword Arguments:
             result {dict} -- [description] (default: {{}})
         """
         self.__dict__.update(result)
+
     def delete(self, id=None):
         """Deletes an item from the db
 
@@ -296,6 +307,7 @@ class BaseModel(metaclass=BaseModelMeta):
         query = "DELETE FROM {} ".format(self.table_name)
         query += self.where_clause
         self.query_excute(query, True)
+
     def sub_set(self, list_to_get=None):
         """gets a dictinary with the fields in the list_to_get
         Keyword Arguments:
@@ -316,3 +328,26 @@ class BaseModel(metaclass=BaseModelMeta):
 
                 sub_set[key] = value
         return sub_set
+    def clean_insert_dict(self, dynamic_dict={}, full=True):
+        """cleans a dictionaly according using table column names
+        Keyword Arguments:
+            dynamic_dict {dict} -- [description] (default: {{}})
+        Returns: [dict] -- [with insertable colums]
+        """
+        query = "SELECT * FROM {} limit 1".format(self.table_name)
+        self.query_excute(query)
+
+        if self.cursor.description is not None:
+            self.column_names = [row[0]for row in self.cursor.description]
+        clean_dict = {}
+        if len(self.column_names) == 0:
+            return dynamic_dict
+        if full is True:
+            for col in self.column_names:
+                clean_dict[col] = dynamic_dict.get(col, None)
+        else:
+            for key, value in dynamic_dict.items():
+                key_l = key.lower()
+                if key_l in self.column_names:
+                    clean_dict[key] = value
+        return clean_dict
