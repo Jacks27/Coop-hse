@@ -5,7 +5,7 @@ class Config:
 
     DEBUG = False
     FLASK_DEBUG = 0
-    SECRET_KEY = "You can do this man"
+    SECRET_KEY = "somethig acient, wide , deep and loooong"
     JWT_ALGORITHM = 'HS256'
     CONNECTION_STRING = os.environ["CONNECTION_STRING"]
 class DevelopmentConfig(Config):
