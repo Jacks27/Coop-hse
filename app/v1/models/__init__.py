@@ -230,7 +230,7 @@ class BaseModel(metaclass=BaseModelMeta):
         if single is True:
             try:
                 result = self.cursor.fetchone()
-                if result is not None
+                if result is not None:
                     self.id = result[self.primary_key]
                     self.add_result_to_self(result)
             except psycopg2.ProgrammingError as errorx:
