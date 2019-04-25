@@ -225,16 +225,12 @@ class BaseModel(metaclass=BaseModelMeta):
         """Builds and executes the select querry
         """
         query = self.compile_select()
-        print('____________________________>', query)
         self.query_excute(query)
         self.where_clause = ''
         if single is True:
             try:
                 result = self.cursor.fetchone()
-                print('_________________',result)
-                
-                if result is not None:
-                    print('_________________',self.id)
+                if result is not None
                     self.id = result[self.primary_key]
                     self.add_result_to_self(result)
             except psycopg2.ProgrammingError as errorx:

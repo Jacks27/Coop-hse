@@ -6,3 +6,4 @@ __pycache__
 .coveralls.yml
 .vscode/
 codet.py
+.gitignore
