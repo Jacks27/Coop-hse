@@ -12,7 +12,7 @@ import jwt
 def signup():
     """create useer account  """
     datadict = BaseView.get_jsondata()
-    fields=["firstname", "lastname", "othername", "phonenumber", "email" \
+    fields=["firstname", "lastname", "othername", "email","phonenumber"\
         , "passporturlstring", "password"]
     
     BaseView.required_fields_check(fields, datadict)
@@ -25,13 +25,16 @@ def signup():
         phonenumber, email, passporturlstring, password)
 
     hashedpass=hash_password(password)
-    
-
-    id = UM.insert_data(UM.firstname, UM.lastname, UM.othername,\
-    UM.phonenumber, UM.email, UM.passporturlstring, hashedpass)
-    
-    res  = jsonify({"status": 201, 'data': id})
-    return  make_response(res, 201)
+    UM.insert_data(UM.firstname, UM.lastname, UM.othername,\
+    UM.email, UM.phonenumber, UM.passporturlstring, hashedpass)
+    userdetails=UM.sub_set()
+    token=''
+    if UM.id is not None:
+        token=jwt_encode(userdetails)
+        data = {'user': userdetails, 'token': token}
+        res  = jsonify({"status": 201, 'data': data})
+        return make_response(res, 201)
+    return  make_response(jsonify({"Errro": 'Oops somthing went wrong'}, 500))
 
 def hash_password(password):
     """ password hashing
@@ -52,7 +55,6 @@ def login():
     lm=UserLogin()
     BaseView.required_fields_check(fields, datadict)
     lm.where(dict(email=datadict['email']))
-    print("user______________>id",lm.id) 
     if lm.check_exist() is True and lm.id is not None:
         hashpassword= hash_password(datadict['password'])
         if lm.password==hashpassword:
