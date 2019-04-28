@@ -6,8 +6,9 @@ from flask_mail import Mail, Message
 from app.v1 import my_v1
 from itsdangerous import URLSafeTimedSerializer
 
+app=Flask(__name__)
 def create_app(config="development"):
-    app=Flask(__name__)
+    
     app.config.from_object(configs[config])
     db = SetUpDb(config)
     with app.app_context():
@@ -27,7 +28,7 @@ def send_email(email):
     s = URLSafeTimedSerializer(Config.SECRET_KEY)
     mail_token=s.dumps(email, salt='confirm_email')
 
-    mail=Mail(create_app)
+    mail=Mail(app)
     msg=Message('Thank you for joining us', sender= Config.MAIL_USERNAME, recipients=[email])
     link = url_for('confirm_email', token=mail_token, _external= True )
     msg.body = "Click this link to confirm your account{}, please ignore if this is not intenede  for you".format(link)

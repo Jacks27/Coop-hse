@@ -6,11 +6,10 @@ from app.v1.models.auth_model import UsersModel
 from app.v1.models.auth_login import UserLogin
 from app.v1.views.validate import Validate
 from app.v1.views import BaseView
-from instance.config import Config
 from app.v1.models import BaseModel
 import jwt
-from functools import wraps, partial
-from flask_mail import Message
+from instance.config import Config
+from functools import wraps
 from app import send_email
 
 
