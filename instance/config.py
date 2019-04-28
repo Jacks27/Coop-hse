@@ -8,6 +8,12 @@ class Config:
     SECRET_KEY = "somethig acient, wide , deep and loooong"
     JWT_ALGORITHM = 'HS256'
     CONNECTION_STRING = os.environ["CONNECTION_STRING"]
+    MAIL_SERVER=os.environ["MAIL_SERVER"]
+    MAIL_USERNAME = os.environ["MAIL_USERNAME"]
+    MAIL_PASSWORD = os.environ["MAIL_PASSWORD"]
+    MAILPORT=4
+    MAIL_USE_SSL=True
+    MAIL_USE_TLS=False
 class DevelopmentConfig(Config):
     os.environ["FLASK_ENV"] = 'development'
 
