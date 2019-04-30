@@ -6,9 +6,9 @@ from flask_mail import Mail, Message
 from app.v1 import my_v1
 from itsdangerous import URLSafeTimedSerializer
 
-app=Flask(__name__)
+
 def create_app(config="development"):
-    
+    app=Flask(__name__)
     app.config.from_object(configs[config])
     db = SetUpDb(config)
     with app.app_context():
@@ -19,17 +19,18 @@ def create_app(config="development"):
     return app
 
 
-def send_email(email):
+def send_email(email_dict={}):
     """this method is used to send email in all class and functions
     Arguments:
-    email= email=[{list}] - alist of emails that will be sent to
-    message = msg[{dict}] - a dict with link and a messae
+   email_dict [{ dictionary with email message ,route}]
     """
+    
     s = URLSafeTimedSerializer(Config.SECRET_KEY)
-    mail_token=s.dumps(email, salt='confirm_email')
-
+    
+    token=s.dumps(email_dict['email'], salt='confirm_email')
+    app = create_app()
     mail=Mail(app)
-    msg=Message('Thank you for joining us', sender= Config.MAIL_USERNAME, recipients=[email])
-    link = url_for('confirm_email', token=mail_token, _external= True )
-    msg.body = "Click this link to confirm your account{}, please ignore if this is not intenede  for you".format(link)
+    msg=Message('Hey ,{}'.format(email_dict['msg']), sender= Config.MAIL_USERNAME, recipients=[email_dict['email']])
+    link = url_for('my_v1.{}'.format(email_dict['route']), token=token, _external= True )
+    msg.body = "Click this link {}, please ignore if this is not intenede  for you".format(link)
     mail.send(msg)

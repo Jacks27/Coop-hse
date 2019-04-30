@@ -10,7 +10,8 @@ from app.v1.models import BaseModel
 import jwt
 from instance.config import Config
 from functools import wraps
-from app import send_email
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+import app
 
 
 
@@ -86,8 +87,8 @@ def signup():
     token=''
     if UM.id is not None:
         token=jwt_encode(userdetails)
-        session['email']=email
-        send_email(email)#send confirmation link
+        session['email']=UM.email
+        app.send_email(UM.email)#send confirmation link
         data = {'user': userdetails, 'token': token}
         res  = jsonify({"status": 201, 'data': data})
         return make_response(res, 201)
@@ -173,7 +174,7 @@ def change_password():
     lm=UserLogin()
     fields=['password', 'confirmpassword','newpassword']
     BaseView.required_fields_check(fields, datadict)
-    email = session['email']
+    email=session['email']
     hashedpas=hash_password(datadict['password'])
     if lm.where(dict(email=email))is True and lm.id is not None:
         if lm.password==hashedpas:
@@ -184,8 +185,39 @@ def change_password():
         msg = "wrong password try again"
         res={"status": 404, 'error':msg}
     return make_response(jsonify({res}, res['status']))
-def recover_password():
+def forgot_password():
+    datadict=BaseView.get_jsondata()
+    session['email']= datadict['email']
+    fields=['email']
+    BaseView.required_fields_check(fields, datadict)
+    lm=UserLogin()
+    email=dict(email=datadict['email'])
+    lm.where(email)
+    if lm.check_exist() is True and lm.id is not None:
+        app.send_email(dict(email=datadict['email'], msg='Click the link to recover you password',route='recover_account'))
+     
+        res = {'Message': 'Email was sent to your account please check',
+                   'status': 200}
+    else:
+        res = {
+        'error': "Could not find a account with that email. Please sign up",
+        'status': 400
+        }
+    return make_response(jsonify(res), res['status'])
+
+
+def recover_account(token):
     pass
 
+
 def confirm_email(token):
-   pass
+    s = URLSafeTimedSerializer(Config.SECRET_KEY)
+    try:
+        s.loads(token, salt='confirm_email', max_age=60)
+    except SignatureExpired:
+        msg = "Activation link has expired , please reset your account"
+        res={'status': 403, 'error':msg}
+        return make_response(jsonify(res, res['status']))
+    msg = "Account is activated "
+    res={"status": 200, 'error':msg}
+    return make_response(jsonify({res}, res['status']))

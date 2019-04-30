@@ -9,7 +9,7 @@ class Validate:
             notFound= [i for i in data_fields if i not in dataDict or len(str(dataDict[i])) < 1]
         print(notFound)
         if (len(notFound) > 0):
-            res ="The following fields are required {}".format(', '.join(notFound))
+            res ="Required* {}".format(', '.join(notFound))
             return cls.make_dict(False, res)
         else:
             return cls.make_dict(True)
