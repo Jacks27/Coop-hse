@@ -2,3 +2,5 @@
 venv
 *.pyc
 .gitignore
+instance
+.env
