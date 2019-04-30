@@ -165,7 +165,6 @@ class BaseModel(metaclass=BaseModelMeta):
         query ="""INSERT INTO {} ({}) VALUES({}) RETURNING {}"""\
             .format(self.table_name, ', '.join(self.tbl_colomns), \
                 values,', '.join(self.sub_set_cols) )
-        print('query is -____________________>', query)
         self.query_excute(query, True)
         try:
             
@@ -219,7 +218,8 @@ class BaseModel(metaclass=BaseModelMeta):
                 clause += " {} {}{}'{}'". format(operator,
                                                  key, comparison, value)
         self.where_clause += clause
-        return self.where_clause
+        print('_____________________>',self.where_clause )
+        return self.where_clause 
 
     def get(self, single=True,  number="all",):
         """Builds and executes the select querry
@@ -347,3 +347,31 @@ class BaseModel(metaclass=BaseModelMeta):
                 if key_l in self.column_names:
                     clean_dict[key] = value
         return clean_dict
+
+    def update(self, update_dict, pry_key):
+        """pursers update query
+        Arguments: update_dict {[type]} -- [description]
+        """
+        set_part = ''
+        data_len = len(update_dict)
+        for key, value in update_dict.items():
+            
+            if data_len==1:
+                set_part += " {}='{}'".format(key, value)
+            else:
+                set_part += " {}='{}',".format(key, value)
+        self.where({self.primary_key: pry_key})
+        query = "UPDATE {} SET {} ".format(self.table_name, set_part)
+        query += self.where_clause
+        query += " RETURNING {}".format(','.join(self.sub_set_cols))
+        self.query_excute(query, True)
+        try:
+            result = self.cursor.fetchone()
+            if result:
+                self.id = result[self.primary_key]
+                self.add_result_to_self(result)
+        except psycopg2.ProgrammingError as errorx:
+            result = None
+            self.errors.append(errorx)
+        self.where_clause = ''
+        return result

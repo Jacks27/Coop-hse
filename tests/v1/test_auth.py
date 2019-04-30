@@ -25,4 +25,7 @@ class TestAuth(BaseTest):
         print(json.loads(result.data))
         datacheck2 = json.loads(result.data)
         self.check_standard_reply(datacheck2, 400, True)
+    def test_make_admin(self):
+        pass
+    
 
