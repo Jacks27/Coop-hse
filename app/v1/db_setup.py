@@ -36,4 +36,16 @@ class SetUpDb:
         """ commit changes and close databse connnections"""
         self.connection.commit()
         self.cursor.close()
+
+    def drop_tables(self):
+        """
+        Drops all tables from the db
+        """
+        
+        for query in table_create_sql:
+                self.cursor.execute(query)
+                self.commit()
+
+        
+
     

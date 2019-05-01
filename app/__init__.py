@@ -31,6 +31,6 @@ def send_email(email_dict={}):
     app = create_app()
     mail=Mail(app)
     msg=Message('Hey ,{}'.format(email_dict['msg']), sender= Config.MAIL_USERNAME, recipients=[email_dict['email']])
-    link = url_for('my_v1.{}'.format(email_dict['route']), token=token, _external= True )
-    msg.body = "Click this link {}, please ignore if this is not intenede  for you".format(link)
+    link = url_for('my_v1.{}'.format(email_dict['route']), token=token, email= email_dict['email'], _external= True)
+    msg.body = "Click this link {}, please ignore if this is not intended for you".format(link)
     mail.send(msg)

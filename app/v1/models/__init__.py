@@ -46,7 +46,7 @@ class Sized(Descriptor):
     @staticmethod
     def set_code():
         return ['if len(value) < self.minlen:\n', \
-            '    msg ="{} too small must be greater than{}".format(value, self.minlen)\n',
+            '    msg ="Password too small must be greater than {}".format(self.minlen)\n',
             '    from_setter(msg)']
 class Typed(Descriptor): 
     """ validate object type
@@ -218,7 +218,8 @@ class BaseModel(metaclass=BaseModelMeta):
                 clause += " {} {}{}'{}'". format(operator,
                                                  key, comparison, value)
         self.where_clause += clause
-        print('_____________________>',self.where_clause )
+        print('_____________________>', self.where_clause)
+        
         return self.where_clause 
 
     def get(self, single=True,  number="all",):
@@ -276,11 +277,14 @@ class BaseModel(metaclass=BaseModelMeta):
         """
         if self.select_query:
             query = self.select_query
+            
         else:
             query = self.select()
+            
         if self.where_clause != '' and "WHERE" in self.where_clause:
             query += ' ' + self.where_clause
         self.compiled_select = query
+        
 
         return self.compiled_select
         
@@ -364,6 +368,7 @@ class BaseModel(metaclass=BaseModelMeta):
         query = "UPDATE {} SET {} ".format(self.table_name, set_part)
         query += self.where_clause
         query += " RETURNING {}".format(','.join(self.sub_set_cols))
+        
         self.query_excute(query, True)
         try:
             result = self.cursor.fetchone()

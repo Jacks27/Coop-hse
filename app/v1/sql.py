@@ -15,4 +15,4 @@ table_create_sql = [
      """
     ]
 drop_tables2 = """DROP TABLE
-                users """
+                users;"""

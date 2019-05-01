@@ -3,8 +3,8 @@ import datetime
 import hashlib
 from flask import make_response, abort, jsonify, request, abort, session, url_for
 from app.v1.models.auth_model import UsersModel
-from app.v1.models.auth_login import UserLogin
-from app.v1.views.validate import Validate
+from app.v1.models.auth_login import UserLogin,ForgotPass
+from app.v1.views.validate import Validate, CheckEmail
 from app.v1.views import BaseView
 from app.v1.models import BaseModel
 import jwt
@@ -12,6 +12,7 @@ from instance.config import Config
 from functools import wraps
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 import app
+from urllib.parse import unquote_to_bytes
 
 
 
@@ -50,7 +51,7 @@ def auth_admin(func):
             400))
 
     return func_wrapper
-"""@auth_admin"""
+
 def signup():
     """create useer account  """
     datadict = BaseView.get_jsondata()
@@ -88,7 +89,8 @@ def signup():
     if UM.id is not None:
         token=jwt_encode(userdetails)
         session['email']=UM.email
-        app.send_email(UM.email)#send confirmation link
+        message="please click  the then link to activate your account"
+        app.send_email(dict(email=UM.email,msg=message, route='confirm_email' ))#send confirmation link email_dict [{ dictionary with email message ,route}]
         data = {'user': userdetails, 'token': token}
         res  = jsonify({"status": 201, 'data': data})
         return make_response(res, 201)
@@ -124,7 +126,7 @@ def login():
                             },
                    'status': 200}
         else:
-            res = res = {
+            res = {
                 'error': "Wrong emai/password combination. Please try again",
                 'status': 400
             }
@@ -148,16 +150,24 @@ def jwt_encode(payload):
     token = jwt.encode(payload, secret, algo)
     return token.decode('UTF-8')
 
-def make_SU(user_id):
-    
+def make_admin():
+    datadict=BaseView.get_jsondata()
+    fields=['email']
+    BaseView.required_fields_check(fields, datadict)
+    CE=CheckEmail(datadict['email'])
     lm=UserLogin()
-    if lm.where(dict(id=user_id)) is True and lm.id is not None:
-        lm.update(dict(isAdmin=True), user_id)
-        res = {'status': 202, 'data':lm.sub_set}
+    lm.where(dict(email=CE.email))
+    if lm.check_exist() is True and lm.id is not None:
+        lm.update(dict(isAdmin=True), lm.id)
+        res = {'status': 201, 
+        'data': {'message':'User have been granted admin rights' ,
+         'user':{'id':lm.id}
+         }
+         }
     else:
         msg = "User not found"
-        res={"status": 404, 'error':msg}
-    return make_response(jsonify({res}, res['status']))
+        res={"status": 204, 'error':msg}
+    return make_response(jsonify(res), res['status'])
 
 def get_users():
     lm=UserLogin()
@@ -170,21 +180,28 @@ def get_users():
     return make_response(res, 200)
 
 def change_password():
+
     datadict=BaseView.get_jsondata()
     lm=UserLogin()
-    fields=['password', 'confirmpassword','newpassword']
+    fields=['password', 'newpassword', 'confirmpassword']
     BaseView.required_fields_check(fields, datadict)
     email=session['email']
-    hashedpas=hash_password(datadict['password'])
-    if lm.where(dict(email=email))is True and lm.id is not None:
+    lm.where(dict(email=email))
+    fg=ForgotPass(datadict['newpassword'])
+    if lm.check_exist() is True and lm.id is not None:
+        hashedpas=hash_password(datadict['password'])
         if lm.password==hashedpas:
-            newpass=hash_password(datadict['newpassword'])
-            lm.update(dict(password=newpass), lm.id)
-        res = {'status': 202, 'data':lm.sub_set}
+            newpass=hash_password(fg.password)
+            lm.update(dict(password = newpass), lm.id)
+            res = {'status': 202, 'message': "password updated successfully"}
+        else:
+            msg = "wrong password try again"
+            res={"status": 404, 'error':msg }
     else:
-        msg = "wrong password try again"
+        msg = "Something went wrong, login and try again"
         res={"status": 404, 'error':msg}
-    return make_response(jsonify({res}, res['status']))
+    return make_response(jsonify(res), res['status'])
+
 def forgot_password():
     datadict=BaseView.get_jsondata()
     session['email']= datadict['email']
@@ -206,18 +223,29 @@ def forgot_password():
     return make_response(jsonify(res), res['status'])
 
 
-def recover_account(token):
+def recover_account(token, email):
     pass
 
 
-def confirm_email(token):
+def confirm_email(token, email):
+    res={}
+    msg=''
     s = URLSafeTimedSerializer(Config.SECRET_KEY)
+    lm=UserLogin()
+    emailb=unquote_to_bytes(email)
+    lm.where(dict(email=email))
+    if lm.check_exist() is True and lm.id is not None:
+        lm.update(dict(active=True), lm.id)
+        res = {'status': 202, 'message': "Account activated successfully"}
+    else:
+        msg = "Something went wrong, login and try again"
+        res={"status": 404, 'error':msg}
+
     try:
-        s.loads(token, salt='confirm_email', max_age=60)
+        
+        s.loads(token, salt='confirm_email', max_age=86400)
+        
     except SignatureExpired:
         msg = "Activation link has expired , please reset your account"
         res={'status': 403, 'error':msg}
-        return make_response(jsonify(res, res['status']))
-    msg = "Account is activated "
-    res={"status": 200, 'error':msg}
-    return make_response(jsonify({res}, res['status']))
+    return make_response(jsonify(res), res['status'])

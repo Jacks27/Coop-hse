@@ -1,4 +1,5 @@
 """ validate.py """
+from app.v1.models import BaseModel, String, Strpatt, SizedString, Integer, SizedInteger
 class Validate:
 
     @classmethod
@@ -19,3 +20,6 @@ class Validate:
     def make_dict(cls, status, res=''):
         """ returns a dict  {resp: resp, status:status }"""
         return dict(res=res, status= status)
+class CheckEmail(BaseModel):
+    """ validate string only """
+    email = Strpatt(pat=r"\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?")
