@@ -756,6 +756,14 @@ tr:nth-child(even) {
   background-color: #dddddd;
 }
 /* end table section */
+/* nave top right */
+.topnav-right {
+  float: right;
+}
+.topnav-right a{
+  padding: 4px;
+  color: white;
+}
 /* login_form section */
 .login_form input[type=text]{
   margin:auto;
