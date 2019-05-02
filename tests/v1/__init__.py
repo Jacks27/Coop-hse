@@ -6,8 +6,8 @@ import json
 from app.v1.db_setup import SetUpDb
 from run import copApp
 
-config_name = "testing"
-db = SetUpDb(config_name)
+
+db = SetUpDb(config_name='testing')
 
 class BaseTest(unittest.TestCase):
     
@@ -40,6 +40,12 @@ class BaseTest(unittest.TestCase):
     @staticmethod
     def generate_number():
         return random.randint(0, 19)
+    @staticmethod
+    def generate_admin():
+        admin_data = {
+            "email":"lilu@quickmail.rocks"
+        }
+        return admin_data
 
     def generate_random_user( self):
         return {
@@ -47,14 +53,17 @@ class BaseTest(unittest.TestCase):
                 "lastname":"kariuki",
                 "othername":"karis",
                 "email":"{}.ka@gmail.com".format(BaseTest.generate_name(6)),
-                "phonenumber":"234454552{}".format(BaseTest.generate_number()),
+                "phonenumber":"25648556552{}".format(BaseTest.generate_number()),
                 "passporturlstring":"https://www.xmicrosoft.com",
                 "password": "jacks278"
             }
 
     def login(self):
         login_data = {
-            "email":"34455677837",
+            "email":"lilu@quickmail.rocks",
             "password" : "jacks278"
             }
         return login_data
+        
+    def tearDown(self):
+        db.drop_tables()

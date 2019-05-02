@@ -26,6 +26,10 @@ class TestAuth(BaseTest):
         datacheck2 = json.loads(result.data)
         self.check_standard_reply(datacheck2, 400, True)
     def test_make_admin(self):
-        pass
-    
+        data=self.generate_admin()
+        result = self.auth_request('app/v1/create_admin', 'PATCH', data)
+        self.assertEqual(result.status_code, 201)
+        datacheck = json.loads(result.data)
+        self.check_standard_reply(datacheck, 200,)
+
 
