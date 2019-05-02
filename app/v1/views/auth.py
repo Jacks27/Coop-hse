@@ -223,8 +223,32 @@ def forgot_password():
     return make_response(jsonify(res), res['status'])
 
 
+
 def recover_account(token, email):
-    pass
+    datadict=BaseView.get_jsondata()
+    fields=['password', 'confirmpassword']
+    BaseView.required_fields_check(fields, datadict)
+    res={}
+    msg=''
+    s = URLSafeTimedSerializer(Config.SECRET_KEY)
+    lm=UserLogin()
+    lm.where(dict(email=email))
+    if lm.check_exist() is True and lm.id is not None:
+        newpass=hash_password(datadict['confirmpassword'])
+        lm.update(dict(password=newpass), lm.id)
+        res = {'status': 202, 'message': "Passwrd was reset successfuly successfully"}
+    else:
+        msg = "Something went wrong, login and try again"
+        res={"status": 404, 'error':msg}
+
+    try:
+        
+        s.loads(token, salt='confirm_email', max_age=86400)
+        
+    except SignatureExpired:
+        msg = "Activation link has expired , please reset your account"
+        res={'status': 403, 'error':msg}
+    return make_response(jsonify(res), res['status'])
 
 
 def confirm_email(token, email):
@@ -232,7 +256,7 @@ def confirm_email(token, email):
     msg=''
     s = URLSafeTimedSerializer(Config.SECRET_KEY)
     lm=UserLogin()
-    emailb=unquote_to_bytes(email)
+    
     lm.where(dict(email=email))
     if lm.check_exist() is True and lm.id is not None:
         lm.update(dict(active=True), lm.id)
