@@ -134,7 +134,7 @@ a:focus {
 
 #about .about-container .icon-box .icon {
   float: left;
-  background: #fff;
+  background:whitesmoke;
   width: 64px;
   height: 64px;
   display: -webkit-box;
@@ -795,7 +795,7 @@ tr:nth-child(even) {
   display: inline-block;
   width:5%;
   text-align: right;
-  padding-right: 5%
+  margin-right: 5%;
 
 }
 .img{
@@ -819,11 +819,17 @@ margin-right: auto;
 .active, .collapsible:hover {
   background-color: #ccc;
 }
-.content {
+.collapsible.content{
   padding: 0 18px;
   display: none;
   overflow: hidden;
   background-color: #f1f1f1;
+}
+#faq .section-header{
+  margin-top: 10%;
+}
+#faq  h3{
+  margin-top: 10px;
 }
 .content p{
 font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
@@ -865,8 +871,9 @@ font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   text-decoration: none;
   display: inline-block;
   margin: auto;
+  font-size: 0.8em;
 }
 
 .InterDiv a:hover, a:active {
-  background-color:  #15921b;
+  color:  #7669ee;
 }

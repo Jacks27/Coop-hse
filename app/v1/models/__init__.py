@@ -74,6 +74,8 @@ class Pattern(Descriptor):
 class Integer(Typed):
     """class expect object to be int """
     ty=int
+class Float(Typed):
+    ty=float
 
 class String(Typed):
     """ class String expect object to be String """
