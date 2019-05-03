@@ -819,7 +819,7 @@ margin-right: auto;
 .active, .collapsible:hover {
   background-color: #ccc;
 }
-.collapsible.content{
+.collcontent{
   padding: 0 18px;
   display: none;
   overflow: hidden;
@@ -834,6 +834,10 @@ margin-right: auto;
 .content p{
 font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
+collcontent  p{
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  }
+  
 .collapsible:after {
   content: '\02795'; /* Unicode character for "plus" sign (+) */
   font-size: 13px;
