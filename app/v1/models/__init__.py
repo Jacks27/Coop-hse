@@ -74,7 +74,10 @@ class Pattern(Descriptor):
 class Integer(Typed):
     """class expect object to be int """
     ty=int
-
+class Float(Typed):
+    ty=float
+class SizedFloat(Sized, Float):
+    pass
 class String(Typed):
     """ class String expect object to be String """
     ty= str
@@ -119,7 +122,8 @@ class BaseModel(metaclass=BaseModelMeta):
     table_name = None
     colomn_name = None
     primary_key = 'id'
-    sub_set_cols = [primary_key]
+    isadmin='isadmin'
+    sub_set_cols = [primary_key, isadmin]
     id = None
     compiled_select = ""
    
@@ -165,6 +169,7 @@ class BaseModel(metaclass=BaseModelMeta):
         query ="""INSERT INTO {} ({}) VALUES({}) RETURNING {}"""\
             .format(self.table_name, ', '.join(self.tbl_colomns), \
                 values,', '.join(self.sub_set_cols) )
+        print("______________________________>",query)
         self.query_excute(query, True)
         try:
             
@@ -177,6 +182,7 @@ class BaseModel(metaclass=BaseModelMeta):
         except psycopg2.ProgrammingError as errorx:
             result=None
             self.errors.append(errorx)
+        
     @classmethod
     def query_excute(cls, query, commit=False):
         try:
@@ -223,7 +229,8 @@ class BaseModel(metaclass=BaseModelMeta):
         return self.where_clause 
 
     def get(self, single=True,  number="all",):
-        """Builds and executes the select querry
+        """
+        Builds and executes the select querry
         """
         query = self.compile_select()
         self.query_excute(query)
@@ -234,6 +241,7 @@ class BaseModel(metaclass=BaseModelMeta):
                 if result is not None:
                     self.id = result[self.primary_key]
                     self.add_result_to_self(result)
+
             except psycopg2.ProgrammingError as errorx:
                 result = None
                 self.errors.append(errorx)
@@ -325,9 +333,9 @@ class BaseModel(metaclass=BaseModelMeta):
         for key, value in self.__dict__.items():
             # displays class's namespace
             if key in list_to_get:
-
                 sub_set[key] = value
         return sub_set
+
     def clean_insert_dict(self, dynamic_dict={}, full=True):
         """cleans a dictionaly according using table column names
         Keyword Arguments:
@@ -357,18 +365,19 @@ class BaseModel(metaclass=BaseModelMeta):
         Arguments: update_dict {[type]} -- [description]
         """
         set_part = ''
-        data_len = len(update_dict)
+       
+
         for key, value in update_dict.items():
-            
-            if data_len==1:
-                set_part += " {}='{}'".format(key, value)
+            if isinstance(value, str):
+                set_part+="{}='{}',".format(key, value)
             else:
-                set_part += " {}='{}',".format(key, value)
+                set_part+="{}={},".format(key, value)
+
         self.where({self.primary_key: pry_key})
-        query = "UPDATE {} SET {} ".format(self.table_name, set_part)
+        query = "UPDATE {} SET {} ".format(self.table_name, set_part.rstrip(','))
         query += self.where_clause
         query += " RETURNING {}".format(','.join(self.sub_set_cols))
-        
+        print("____________________>", query)
         self.query_excute(query, True)
         try:
             result = self.cursor.fetchone()

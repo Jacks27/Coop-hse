@@ -5,23 +5,25 @@ table_create_sql = [
                 lastname  VARCHAR(55) NOT NULL,
                 othername  VARCHAR(55),
                 email TEXT UNIQUE NOT NULL,
-                phoneNumber VARCHAR(15) ,
+                phoneNumber VARCHAR(15),
                 passportUrlString TEXT NOT NULL,
                 password TEXT  NOT NULL,
                 isAdmin  BOOLEAN NOT NULL DEFAULT FALSE,
                 createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updatedAt  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                );,
+                );""",
         
-        CREATE  TABLE IF NOT EXISTS services (
+       """ CREATE  TABLE IF NOT EXISTS services(
             id SERIAL PRIMARY KEY,
             water BOOLEAN DEFAULT True,
             electricity  BOOLEAN DEFAULT True,
-            roads  BOOLEAN DEFAULT True,
-        );,
+            roads  BOOLEAN DEFAULT True
+        );
+        """,
+        """
         CREATE  TABLE IF NOT EXISTS products(
             id SERIAL PRIMARY KEY,
-            services_id  INTEGER NOT NULL
+            services_id  INTEGER NOT NULL,
             project_name  VARCHAR(55) NOT NULL,
             project_type  VARCHAR(55) NOT NULL,
             size          VARCHAR(55),
@@ -33,10 +35,11 @@ table_create_sql = [
             image        BYTEA NOT NULL,
             sold_out  BOOLEAN DEFAULT False,
             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updatedAt  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            FOREIGN KEY(services_id) REFERENCES services(id)
+            updatedAt  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(services_id) REFERENCES services(id) ON UPDATE CASCADE ON DELETE CASCADE
         );
      """
     ]
 drop_tables2 = """DROP TABLE
                 users, services, products;"""
+                
