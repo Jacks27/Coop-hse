@@ -31,8 +31,10 @@ def auth_admin(func):
         request.user = None
 
         token = request.headers.get('authorization', None)
+       
 
         if token:
+            
             if token.startswith('Bearer '):
                 token = token.replace('Bearer ', '')
             secret = Config.SECRET_KEY
@@ -40,20 +42,23 @@ def auth_admin(func):
             try:
                 payload = jwt.decode(token, secret, algo)
                 isadmin = payload.get('isadmin', False)
+                print("_____________________>", isadmin, payload)
                 if isadmin is True:
+                    print("_____________________>", isadmin)
                     request.user = payload
                     return func(*args, **kwargs)
             except (jwt.DecodeError):
                 pass
         return abort(make_response(jsonify(
-            {"status": 400,
+            {"status": 401,
                 'error': "You are not authorized to perform this action"}),
-            400))
+            401))
 
     return func_wrapper
 
+@auth_admin
 def signup():
-    """create useer account  """
+    """create user account  """
     datadict = BaseView.get_jsondata()
     fields=["firstname", "lastname", "othername", "email","phonenumber"\
         , "passporturlstring", "password"]
@@ -117,8 +122,10 @@ def login():
     lm.where(dict(email=datadict['email']))
     if lm.check_exist() is True and lm.id is not None:
         hashpassword= hash_password(datadict['password'])
+        
         if lm.password==hashpassword:
             payload = lm.sub_set()
+            print('___________________>',payload)
             payload.update({'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)})
             token = jwt_encode(payload)
             session['email']= datadict['email']
