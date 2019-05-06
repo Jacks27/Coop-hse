@@ -118,7 +118,9 @@ def productdetail(product_id):
         res = {'status': 200, 'data': productexist}
     else:
         res = {"status": 404,
-                   'error': "Product with id {} not found".format(product_id)}
+                'error': "Product with id {} not found".format(product_id)
+                }
+
     return make_response(jsonify(res), res['status'])
 
 def deleteproduct(product_id):

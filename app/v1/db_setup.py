@@ -7,7 +7,7 @@ class SetUpDb:
     """ Class tha create all the tables for the app"""
 
 
-    def __init__(self, config_name='development'):
+    def __init__(self, config_name='production'):
         """ create connection to the database using config setting
         Argument
         config_name[{String}]
