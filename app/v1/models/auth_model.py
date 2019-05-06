@@ -8,8 +8,7 @@ class UsersModel(BaseModel):
     othername = Strpatt(pat='[-a-zA-Z]+$') 
     email = Strpatt(pat=r"\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?")
     phonenumber = SizedString(minlen=10)
-    passporturlstring = Strpatt(\
-    pat=r"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$")
-    password = SizedString(minlen=8)
-    tbl_colomns = ["firstname", "lastname", "othername", "email", "phonenumber", "passporturlstring", "password"] 
+    passporturlstring = SizedString(minlen=20 )
+    psnumber = SizedString(minlen=8)
+    tbl_colomns = ["firstname", "lastname", "othername", "email", "phonenumber", "psnumber", "password"] 
     table_name = 'users'
