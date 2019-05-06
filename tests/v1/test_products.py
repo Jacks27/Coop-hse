@@ -60,5 +60,10 @@ class TestProducts(BaseTest):
         self.assertEqual(result.status_code, 400)
         datacheck = json.loads(result.data)
         self.check_standard_reply(datacheck, 400, True)
-
-
+    def test_recover_password(self):
+        data = self.product2
+        result= self.auth_request('app/v1/add_project', 'POST', data)
+        print(json.loads(result.data))
+        self.assertEqual(result.status_code, 400)
+        datacheck = json.loads(result.data)
+        self.check_standard_reply(datacheck, 400, True)

@@ -39,10 +39,11 @@ def auth_admin(func):
                 token = token.replace('Bearer ', '')
             secret = Config.SECRET_KEY
             algo = Config.JWT_ALGORITHM
+            print("_______", algo)
             try:
                 payload = jwt.decode(token, secret, algo)
                 isadmin = payload.get('isadmin', False)
-                print("_____________________>", isadmin, payload)
+                
                 if isadmin is True:
                     print("_____________________>", isadmin)
                     request.user = payload
@@ -56,7 +57,7 @@ def auth_admin(func):
 
     return func_wrapper
 
-@auth_admin
+
 def signup():
     """create user account  """
     datadict = BaseView.get_jsondata()
@@ -125,7 +126,7 @@ def login():
         
         if lm.password==hashpassword:
             payload = lm.sub_set()
-            print('___________________>',payload)
+            
             payload.update({'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)})
             token = jwt_encode(payload)
             session['email']= datadict['email']
@@ -155,8 +156,9 @@ def jwt_encode(payload):
     secret = Config.SECRET_KEY
     algo = Config.JWT_ALGORITHM
     token = jwt.encode(payload, secret, algo)
-    return token.decode('UTF-8')
+    return token.decode("utf-8")
 
+@auth_admin
 def make_admin():
     datadict=BaseView.get_jsondata()
     fields=['email']
@@ -175,7 +177,7 @@ def make_admin():
         msg = "User not found"
         res={"status": 204, 'error':msg}
     return make_response(jsonify(res), res['status'])
-
+@auth_admin
 def get_users():
     lm=UserLogin()
     select_cols= lm.tbl_colomns
@@ -210,8 +212,9 @@ def change_password():
     return make_response(jsonify(res), res['status'])
 
 def forgot_password():
+    """checks if the email exists and send an email link to the user """
     datadict=BaseView.get_jsondata()
-    session['email']= datadict['email']
+    
     fields=['email']
     BaseView.required_fields_check(fields, datadict)
     lm=UserLogin()
@@ -225,7 +228,7 @@ def forgot_password():
     else:
         res = {
         'error': "Could not find a account with that email. Please sign up",
-        'status': 400
+        'status': 404
         }
     return make_response(jsonify(res), res['status'])
 
@@ -239,11 +242,13 @@ def recover_account(token, email):
     msg=''
     s = URLSafeTimedSerializer(Config.SECRET_KEY)
     lm=UserLogin()
-    lm.where(dict(email=email))
-    if lm.check_exist() is True and lm.id is not None:
-        newpass=hash_password(datadict['confirmpassword'])
-        lm.update(dict(password=newpass), lm.id)
-        res = {'status': 202, 'message': "Passwrd was reset successfuly successfully"}
+    if email is not None:
+
+        lm.where(dict(email=email))
+        if lm.check_exist() is True and lm.id is not None:
+            newpass=hash_password(datadict['confirmpassword'])
+            lm.update(dict(password=newpass), lm.id)
+            res = {'status': 202, 'message': "Passwrd was reset successfuly successfully"}
     else:
         msg = "Something went wrong, login and try again"
         res={"status": 404, 'error':msg}

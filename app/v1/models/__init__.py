@@ -159,16 +159,18 @@ class BaseModel(metaclass=BaseModelMeta):
         return self
     
     def insert_data(self, *args):
+        set_part= ''
+        for value in args:
+            if isinstance(value, str):
+                set_part+="'{}',".format(value)
+            else:
+                set_part+="{},".format(value)
         
-        list_vals = []
-        for item in args:
-            val = "'{}'".format(item)
-            list_vals.append(val)
-        values = ', '.join(list_vals)
+        values = set_part.rstrip(',')
         
-        query ="""INSERT INTO {} ({}) VALUES({}) RETURNING {}"""\
+        query ="""INSERT INTO {} ({}) VALUES({}) RETURNING id"""\
             .format(self.table_name, ', '.join(self.tbl_colomns), \
-                values,', '.join(self.sub_set_cols) )
+                values)
         print("______________________________>",query)
         self.query_excute(query, True)
         try:

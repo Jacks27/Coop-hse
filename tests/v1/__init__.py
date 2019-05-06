@@ -16,6 +16,7 @@ class BaseTest(unittest.TestCase):
         copApp.config.from_object(configs["testing"])
         self.client = copApp.test_client
         self.token = ''
+        self.login()
 
     def post(self, path, data):
         result =self.auth_request(path, 'POST', data)
@@ -40,6 +41,9 @@ class BaseTest(unittest.TestCase):
     @staticmethod
     def generate_number():
         return random.randint(0, 19)
+    
+   
+
     @staticmethod
     def generate_admin():
         admin_data = {
@@ -53,16 +57,25 @@ class BaseTest(unittest.TestCase):
                 "lastname":"kariuki",
                 "othername":"karis",
                 "email":"{}.ka@gmail.com".format(BaseTest.generate_name(6)),
-                "phonenumber":"25648556552{}".format(BaseTest.generate_number()),
+                "phonenumber":"256056456552{}".format(BaseTest.generate_number()),
                 "passporturlstring":"https://www.xmicrosoft.com",
                 "password": "jacks278"
             }
 
+    
     def login(self):
         login_data = {
             "email":"lilu@quickmail.rocks",
             "password" : "jacks278"
             }
+        result2 = self.auth_request(
+            '/app/v1/login', 'POST', login_data)
+       
+        data = json.loads(result2.data)
+        
+        if data['data']['token']:
+            self.token = data['data']['token']
+        print('______', self.token)
         return login_data
         
     def tearDown(self):
