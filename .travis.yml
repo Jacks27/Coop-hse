@@ -9,6 +9,13 @@ install:
     - pip install coveralls
 before_script:
     - export FLASK_APP='run.py'
+    - export FLASK_ENV=development
+    - export CONNECTION_STRING="dbname='cop_bnk_hsing' user='postgres' host='localhost' password='admin'"
+    - export TEST_CONNECTION_STRING="dbname='test_cop_bnk_hsing' user='postgres' host='localhost' password='admin'"
+    - export MAIL_SERVER='smtp.gmail.com'
+    - export MAIL_USERNAME='simon.jackson.kariuki@gmail.com'
+    - export MAIL_PASSWORD='milkyno27'
+    - export MAIL_PORT=465
 script:
     - nosetests --with-coverage --cover-package=app
 after_success:
