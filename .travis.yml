@@ -10,7 +10,8 @@ install:
 before_script:
     - export FLASK_APP='run.py'
 script:
-    - nosetests --with-coverage --cover-package=app
+    - nosetests --with-coverage --cover-package=copApp
 after_success:
     - coveralls
     - codecov
+   
