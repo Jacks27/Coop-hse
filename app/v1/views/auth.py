@@ -65,7 +65,7 @@ def signup():
 
     
     UM=UsersModel(firstname, lastname, othername,\
-        phonenumber, email, passporturlstring, password)
+        phonenumber, email, psnumber, password)
     lm.where(dict(email=datadict['email']))
     if lm.check_exist() is True:
         Error+=("Account with the following {} email exists".format(datadict['email']),)

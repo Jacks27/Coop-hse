@@ -58,7 +58,7 @@ class BaseTest(unittest.TestCase):
                 "othername":"karis",
                 "email":"{}.ka@gmail.com".format(BaseTest.generate_name(6)),
                 "phonenumber":"256056456552{}".format(BaseTest.generate_number()),
-                "passporturlstring":"https://www.xmicrosoft.com",
+                "psnumber":"https://www.xmicrosoft.com",
                 "password": "jacks278"
             }
 
