@@ -59,23 +59,23 @@ def signup():
         , "psnumber", "password"]
     Error= ()
     BaseView.required_fields_check(fields, datadict)
-    lm=UserLogin()  
+      
     firstname, lastname, othername, phonenumber, email, psnumber, password =\
     [val for val in datadict.values()]
 
     
     UM=UsersModel(firstname, lastname, othername,\
         phonenumber, email, psnumber, password)
-    lm.where(dict(email=datadict['email']))
-    if lm.check_exist() is True:
+    UM.where(dict(email=datadict['email']))
+    if UM.check_exist() is True:
         Error+=("Account with the following {} email exists".format(datadict['email']),)
     
-    lm.where(dict(phonenumber=datadict['phonenumber']))
-    if lm.check_exist() is True:
+    UM.where(dict(phonenumber=datadict['phonenumber']))
+    if UM.check_exist() is True:
         Error+=("Account with the following {} phone number exists".format(datadict['phonenumber']),)
     
-    lm.where(dict(phonenumber=datadict['psnumber']))
-    if lm.check_exist() is True:
+    UM.where(dict(phonenumber=datadict['psnumber']))
+    if UM.check_exist() is True:
         Error+=("Account with the following {}number exists".format(datadict['psnumber']),)
     
     
@@ -86,9 +86,9 @@ def signup():
     hashedpass=hash_password(password)
     UM.insert_data(UM.firstname, UM.lastname, UM.othername,\
     UM.email, UM.phonenumber, UM.passporturlstring, hashedpass)
-    userdetails=lm.sub_set()
+    userdetails=UM.sub_set()
     token=''
-    if lm.id is not None:
+    if UM.id is not None:
         token=jwt_encode(userdetails)
         session['email']=UM.email
         message="please click  the then link to activate your account"

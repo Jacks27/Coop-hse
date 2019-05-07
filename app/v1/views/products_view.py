@@ -1,10 +1,14 @@
 from app.v1.views import BaseView
 from app.v1.models import BaseModel
-from app.v1.models.products import ProductBase, ProductsModel
+from app.v1.models.products import ProductBase, ProductsModel, Checkservice
 from flask import make_response, abort, jsonify, request, abort, session, url_for
 
 def createproduct():
-    """create product  """
+    """create product  
+    Responce :
+    Error: 500 not created
+    msg: 201 created
+    """
     datadict = BaseView.get_jsondata()
     print("datadict---------------", datadict)
     fields=[ "services_id" ,"project_name", "project_type", "size", "county", "location",\
@@ -26,13 +30,6 @@ def createproduct():
     pb.where(dict(image=datadict['image']))
     if pb.check_exist() is True:
         Error+=("Image with the following {} details exists".format(datadict['image']),)
-    
-    
-    
-    
-    if len(Error)> 0:
-        res = jsonify({'error': ",".join(Error), 'status': 400})
-        return abort(make_response(res, 400))
     pb.insert_data(datadict['services_id'], pm.project_name, pm.project_type, pm.size, pm.county, pm.location, pm.location_info,\
         pm.price, pm.other_information, image)
     userdetails=pb.sub_set()
@@ -42,7 +39,7 @@ def createproduct():
         data = {'Item': userdetails, 'msg':"Item was added successfully"}
         res  = jsonify({"status": 201, 'data': data})
         return make_response(res, 201)
-    return  make_response(jsonify({"Errro": 'Oops somthing went wrong'}), 500)
+    return  make_response(jsonify({"Error": 'Oops somthing went wrong'}), 500)
 
 def get_products():
     """gets alist of all the products in the database
