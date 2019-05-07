@@ -9,23 +9,23 @@ class Config:
     JWT_ALGORITHM = 'HS256'
     MAIL_SERVER='smtp.gmail.com'
     MAIL_PORT = 465
-    CONNECTION_STRING = os.environ["CONNECTION_STRING"]
-    MAIL_SERVER=os.environ["MAIL_SERVER"]
-    MAIL_USERNAME = os.environ["MAIL_USERNAME"]
-    MAIL_PASSWORD = os.environ["MAIL_PASSWORD"]
+    CONNECTION_STRING = ENV["CONNECTION_STRING"]
+    MAIL_SERVER=ENV["MAIL_SERVER"]
+    MAIL_USERNAME = ENV["MAIL_USERNAME"]
+    MAIL_PASSWORD = ENV["MAIL_PASSWORD"]
     MAIL_USE_SSL=True
     MAIL_USE_TLS=False
 class DevelopmentConfig(Config):
-    os.environ["FLASK_ENV"] = 'development'
+    ENV["FLASK_ENV"] = 'development'
 
     FLASK_DEBUG = 1
     DEBUG = True
 class TestConfig(Config):
-    os.environ["FLASK_ENV"] = 'testing'
+    ENV["FLASK_ENV"] = 'testing'
     FLASK_DEBUG = 1
     DEBUG = True
     TESTING = True
-    CONNECTION_STRING = os.environ["TEST_CONNECTION_STRING"]
+    CONNECTION_STRING = ENV["TEST_CONNECTION_STRING"]
 
 
 configs = dict(
