@@ -96,7 +96,7 @@ def signup():
         data = {'user': userdetails, 'token': token}
         res  = jsonify({"status": 201, 'data': data})
         return make_response(res, 201)
-    return  make_response(jsonify({"Errro": 'Oops something went wrong'}), 500)
+    return  make_response(jsonify({"Error": 'Oops something went wrong'}), 500)
 
 def hash_password(password):
     """ password hashing
