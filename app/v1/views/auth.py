@@ -86,9 +86,9 @@ def signup():
     hashedpass=hash_password(password)
     UM.insert_data(UM.firstname, UM.lastname, UM.othername,\
     UM.email, UM.phonenumber, UM.passporturlstring, hashedpass)
-    userdetails=UM.sub_set()
+    userdetails=lm.sub_set()
     token=''
-    if UM.id is not None:
+    if lm.id is not None:
         token=jwt_encode(userdetails)
         session['email']=UM.email
         message="please click  the then link to activate your account"
