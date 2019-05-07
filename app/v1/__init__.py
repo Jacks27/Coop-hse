@@ -1,5 +1,4 @@
-from app.v1.views import auth
-from app.v1.views import products_view
+from app.v1.views import products_view,service, auth
 from flask import Blueprint
 my_v1 = Blueprint('my_v1', __name__)
 my_v1.add_url_rule('/signup', view_func=auth.signup, methods=['POST'])
@@ -17,4 +16,4 @@ my_v1.add_url_rule('/update_product', view_func=products_view.update_product, me
 my_v1.add_url_rule('/delete_product/<int:product_id>', view_func=products_view.deleteproduct, methods=['DELETE'])
 my_v1.add_url_rule('/product_detail/<int:product_id>', view_func=products_view.productdetail, methods=['GET'])
 my_v1.add_url_rule('/checked_soldout/<int:product_id>', view_func=products_view.checked_soldout, methods=['PATCH'])
-
+my_v1.add_url_rule('/create_service', view_func=service.createservice, methods=['POST'])

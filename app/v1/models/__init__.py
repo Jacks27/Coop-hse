@@ -74,6 +74,9 @@ class Pattern(Descriptor):
 class Integer(Typed):
     """class expect object to be int """
     ty=int
+class Boolean(Typed):
+    """class expect object to be int """
+    ty= bool
 class Float(Typed):
     ty=float
 class SizedFloat(Sized, Float):
