@@ -1,8 +1,8 @@
-language: 
-    - python
+language: python
 python:
-    - "3.6"
-    - "3.5"
+  - "3.6"
+  - "3.6-dev"  # 3.6 development branch
+  - "3.7-dev" 
 
 install:
     - pip install -r requirments.txt
@@ -12,8 +12,12 @@ install:
 before_script:
     - export FLASK_APP='run.py'
     - export FLASK_ENV=development
+services:
+ - postgresql
+
 script:
     - nosetests --with-coverage --cover-package=app
+
 after_success:
     - coveralls
     - codecov
