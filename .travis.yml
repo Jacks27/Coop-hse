@@ -13,7 +13,7 @@ before_script:
     - export FLASK_DEBUG=1
     - export FLASK_ENV=development
 services:
- - postgresql
+    - postgresql
 
 script:
     - nosetests --with-coverage --cover-package=app
