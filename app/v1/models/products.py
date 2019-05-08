@@ -11,9 +11,12 @@ class ProductsModel(BaseModel):
     price = Float()
     other_information = String()
     image =Strpatt(pat=r"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$")
-    
+    tbl_colomns = ["services_id", "project_name", "project_type", "size", "county",\
+        "location", "location_info", "price", "other_information", "image" ]
     table_name= 'products'
 class ProductBase(BaseModel):
     tbl_colomns = ["services_id", "project_name", "project_type", "size", "county",\
         "location", "location_info", "price", "other_information", "image" ]
     table_name= 'products'
+class Checkservice(BaseModel):
+    table_name= 'services'

@@ -13,7 +13,7 @@ class SetUpDb:
         config_name[{String}]
          """
         connection_string = configs[config_name].CONNECTION_STRING
-        self.connection= psycopg2.connect(connection_string)
+        self.connection= psycopg2.connect(connection_string, sslmode='require')
         self.cursor = self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     
     def get_connection(self):

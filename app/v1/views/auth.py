@@ -87,8 +87,9 @@ def signup():
     UM.insert_data(UM.firstname, UM.lastname, UM.othername,\
     UM.email, UM.phonenumber, UM.passporturlstring, hashedpass)
     userdetails=UM.sub_set()
+    print("___________", userdetails['id'])
     token=''
-    if UM.id is not None:
+    if userdetails['id'] is not None:
         token=jwt_encode(userdetails)
         session['email']=UM.email
         message="please click  the then link to activate your account"
@@ -96,7 +97,7 @@ def signup():
         data = {'user': userdetails, 'token': token}
         res  = jsonify({"status": 201, 'data': data})
         return make_response(res, 201)
-    return  make_response(jsonify({"Errro": 'Oops something went wrong'}), 500)
+    return  make_response(jsonify({"Error": 'Oops something went wrong'}), 500)
 
 def hash_password(password):
     """ password hashing
