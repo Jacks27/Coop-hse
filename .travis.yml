@@ -12,6 +12,11 @@ before_script:
     - export FLASK_APP='run.py'
     - export FLASK_DEBUG=1
     - export FLASK_ENV=development
+    - export FLASK_ENV=development
+    - export DATABASE_URL="dbname='cop_bnk_hsing' user='postgres' host='localhost' password='admin'"
+    - export TEST_DATABASE_URL="dbname='test_cop_bnk_hsing' user='postgres' host='localhost' password='admin'"
+    - export MAIL_SERVER='smtp.gmail.com'
+
 services:
     - postgresql
 
