@@ -27,20 +27,20 @@ class TestAuth(BaseTest):
         self.check_standard_reply(datacheck2, 400, True)
     def test_make_admin(self):
         data=   {
-        "email": "hubuhutusa@royalmarket.online"
+        "email": "lilu@quickmail.rocks"
         }
         result = self.auth_request('app/v1/create_admin', 'PATCH', data)
-        self.assertEqual(result.status_code, 401)
+        self.assertEqual(result.status_code, 201)
         datacheck = json.loads(result.data)
-        self.check_standard_reply(datacheck, 401, True)
+        self.check_standard_reply(datacheck, 201)
     def test_forgot_password(self):
         data = {
-            "email": "hubduhutusa@royalmarket.online"
+            "email": "lilu@quickdmail.rocks"
             }
         result = self.auth_request('app/v1/forgot_password', 'POST', data)
-        self.assertEqual(result.status_code, 404)
+        self.assertEqual(result.status_code, 400)
         datacheck = json.loads(result.data)
-        self.check_standard_reply(datacheck, 404, True)
+        self.check_standard_reply(datacheck, 400, True)
 
     def test_recover_password(self):
         data = {

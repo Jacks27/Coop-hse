@@ -33,6 +33,9 @@ def createproduct():
     pb.insert_data(datadict['services_id'], pm.project_name, pm.project_type, pm.size, pm.county, pm.location, pm.location_info,\
         pm.price, pm.other_information, image)
     userdetails=pb.sub_set()
+    if len(Error)> 0:
+        res = jsonify({'error': ",".join(Error), 'status': 400})
+        return abort(make_response(res, 400))
 
     if pb.id is not None:
         
