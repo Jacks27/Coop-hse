@@ -13,6 +13,13 @@ before_script:
     - export FLASK_DEBUG=1
     - export FLASK_ENV=development
     - export MAIL_SERVER='smtp.gmail.com'
+    - export ADMIN_EMAIL='lilu@quickmail.rocks'
+    - export ADMIN_FIRST_NAME='admin'
+    - export ADMIN_LAST_NAME='default'
+    - export ADMIN_PASSWORD='jacks278'
+    - export ADMIN_OTHERNAME='kariuki'
+    - export ADMIN_PHONENUMBER='07243834834'
+    - export ADMIN_PSNUMBER='https://www.xmsicrosoft.com'
     - psql -c 'create database cop_bnk_hsing;' -U postgres 
 
 services:
