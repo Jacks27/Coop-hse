@@ -16,8 +16,9 @@ def create_app(config="development"):
     app.config.from_object(configs[config])
     db = SetUpDb(config)
     with app.app_context():
-        create_default_admin()
         db.create_tables()
+        create_default_admin()
+        
     app.register_blueprint(my_v1, url_prefix='/app/v1')
     app.secret_key= Config.SECRET_KEY
     

@@ -13,10 +13,12 @@ db = SetUpDb(config_name='testing')
 class BaseTest(unittest.TestCase):
     
     def setUp(self):
+        
         db.create_tables()
         copApp.config.from_object(configs["testing"])
         self.client = copApp.test_client
         self.token = ''
+        create_default_admin()
         self.login()
 
     def post(self, path, data):
@@ -62,8 +64,8 @@ class BaseTest(unittest.TestCase):
                 "psnumber":"https://www.xmicrosoft.com",
                 "password": "jacks278"
             }
-
     
+        
     def login(self):
         login_data = {
             "email":"lilu@quickmail.rocks",
