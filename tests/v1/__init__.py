@@ -3,6 +3,7 @@ import string
 from instance.config import configs
 import unittest
 import json
+from app import create_default_admin
 from app.v1.db_setup import SetUpDb
 from run import copApp
 
