@@ -19,7 +19,7 @@ services:
     - postgresql
 
 script:
-    - nosetests --with-coverage --cover-package=app
+    - nosetests --with-coverage --cover-package=copApp
 
 after_success:
     - coveralls
