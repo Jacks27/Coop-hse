@@ -2,6 +2,9 @@ import json
 from tests.v1 import BaseTest
 
 class TestProducts(BaseTest):
+    services = {
+        "water":True, "electricity":True, "roads":True
+    }
     product1 = {	"services_id": 1,
 	"project_name": "bluespring2a",
 	 "project_type": "house",
@@ -27,6 +30,13 @@ class TestProducts(BaseTest):
 	 "image":"www.emaaail.com"
 	
     }
+    def test_create_services(self):
+        data=self.services
+        result= self.auth_request('app/v1/create_service', 'POST', data)
+        print(json.loads(result.data))
+        self.assertEqual(result.status_code, 201)
+        datacheck = json.loads(result.data)
+        self.check_standard_reply(datacheck, 201)
 
 
     def test_addproduct(self):

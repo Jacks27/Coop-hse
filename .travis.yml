@@ -5,10 +5,10 @@ python:
 install:
     - pip install -r requirements.txt
     - pip install nose
-    
+    - pip install coverage
+    - pip install coveralls
 before_script:
-    - psql -c "CREATE DATABASE cop_bnk_hsing;" -U postgres
-    - psql -c "CREATE DATABASE cop_bnk_hsing;" -U postgres
+    
     - export FLASK_APP=run.py
     - export FLASK_DEBUG=1
     - export FLASK_ENV=development
@@ -20,6 +20,7 @@ before_script:
     - export ADMIN_OTHERNAME='kariuki'
     - export ADMIN_PHONENUMBER='07243834834'
     - export ADMIN_PSNUMBER='https://www.xmsicrosoft.com'
+    - psql -c 'create database cop_bnk_hsing;' -U postgres
 
 services:
     - postgresql
@@ -29,4 +30,5 @@ script:
 
 after_success:
     - coveralls
+    - codecov
    
