@@ -85,7 +85,7 @@ def signup():
 
     hashedpass=hash_password(password)
     UM.insert_data(UM.firstname, UM.lastname, UM.othername,\
-    UM.email, UM.phonenumber, UM.passporturlstring, hashedpass)
+    UM.email, UM.phonenumber, UM.psnumber, hashedpass)
     userdetails=UM.sub_set()
     print("___________", userdetails['id'])
     token=''
