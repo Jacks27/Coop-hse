@@ -19,7 +19,7 @@ class BaseTest(unittest.TestCase):
         self.client = copApp.test_client
         self.token = ''
         create_default_admin()
-        self.login()
+        """self.login()"""
 
     def post(self, path, data):
         result =self.auth_request(path, 'POST', data)
@@ -65,7 +65,7 @@ class BaseTest(unittest.TestCase):
                 "password": "jacks278"
             }
     
-        
+    """    
     def login(self):
         login_data = {
             "email":"lilu@quickmail.rocks",
@@ -78,8 +78,8 @@ class BaseTest(unittest.TestCase):
         
         if data['data']['token']:
             self.token = data['data']['token']
-        print('______', self.token)
-        return login_data
+        print('______>token', self.token)
+        return login_data"""
         
     def tearDown(self):
         db.drop_tables()

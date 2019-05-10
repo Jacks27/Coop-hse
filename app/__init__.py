@@ -18,7 +18,7 @@ def create_app(config="development"):
     with app.app_context():
         db.create_tables()
         create_default_admin()
-        
+
     app.register_blueprint(my_v1, url_prefix='/app/v1')
     app.secret_key= Config.SECRET_KEY
     
@@ -60,7 +60,7 @@ def create_default_admin():
     else:
         UM=UsersModel(firstname, lastname, othername,\
         email, phonenumber, psnumber, password)
-        hashedpass=hash_password(password)
+        hashedpass= hash_password(UM.password)
         UM.insert_data(UM.firstname, UM.lastname, UM.othername,\
         UM.email, UM.phonenumber,UM.psnumber , hashedpass)
         
