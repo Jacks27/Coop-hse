@@ -1,6 +1,5 @@
 language: python
 python:
-  - '3.5'
   - '3.6' 
 
 install:
@@ -27,7 +26,7 @@ services:
     - postgresql
 
 script:
-    - python -m pytest  --cov=app/v1
+    - nosetests --with-coverage --cover-package=copApp
 
 after_success:
     - coveralls
