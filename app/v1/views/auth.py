@@ -50,5 +50,5 @@ def login():
     UsersModel.where(email=data['email'])
     if UsersModel.check_exist() is True and UsersModel.id is not None:
         hashedpass = hash_password(datadict['password'])
-        if UsersModel.password==hash_password
-        payload= UsersModel.sub_set_cols
+        if UsersModel.password==hash_password:
+            payload= UsersModel.sub_set_cols
