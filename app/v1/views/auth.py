@@ -92,7 +92,7 @@ def signup():
     if userdetails['id'] is not None:
         token=jwt_encode(userdetails)
         session['email']=UM.email
-        message="please click  the then link to activate your account"
+        """ message="please click  the then link to activate your account" """
         """ app.send_email(dict(email=UM.email,msg=message, route='confirm_email' ))#send confirmation link email_dict [{ dictionary with email message ,route}]"""
         data = {'user': userdetails, 'token': token}
         res  = jsonify({"status": 201, 'data': data})
