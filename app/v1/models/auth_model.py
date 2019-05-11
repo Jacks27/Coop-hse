@@ -1,7 +1,7 @@
-from app.v1.models import BaseModel, String, Strpatt, SizedString, Integer, SizedInteger
+from app.v1.models import BaseModel, String, Strpatt, SizedString, Integer
 
 class UsersModel(BaseModel):
-    """ User model """ 
+    """User model""" 
     
     firstname = Strpatt(pat='[-a-zA-Z]+$')
     lastname = Strpatt(pat='[-a-zA-Z]+$')
@@ -10,5 +10,5 @@ class UsersModel(BaseModel):
     phonenumber = SizedString(minlen=10)
     psnumber = SizedString(minlen=8)
     password = SizedString(minlen=8)
-    tbl_colomns = ["firstname", "lastname", "othername", "email", "phonenumber", "psnumber", "password", "isadmin"] 
+    tbl_colomns = ["firstname","lastname","othername","email","phonenumber","psnumber","password","isadmin"]
     table_name = 'users'

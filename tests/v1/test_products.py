@@ -7,7 +7,8 @@ class TestProducts(BaseTest):
             "electricity": True,
             "roads": True
         }
-    product1 = {	"services_id": 1,
+    product1 = {
+    "services_id": 1,
 	"project_name": "bluespring2a",
 	 "project_type": "house",
 	 "size": "1/8 acre", 
@@ -16,7 +17,7 @@ class TestProducts(BaseTest):
 	 "location_info":"roads and other stuffs",
 	 "price":230000.00, 
 	 "other_information": "bore holes have been sunk",
-	 "image":"www.emaaail.com"
+     "image":"www.emaaail.com"
 	
     }
     product2 = {	

@@ -1,7 +1,7 @@
 
 import datetime
 import hashlib
-from flask import make_response, abort, jsonify, request, abort, session, url_for
+from flask import make_response, abort, jsonify, request, session, url_for
 from app.v1.models.auth_model import UsersModel
 from app.v1.models.auth_login import UserLogin,ForgotPass
 from app.v1.views.validate import Validate, CheckEmail
@@ -12,7 +12,7 @@ from instance.config import Config
 from functools import wraps
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 import app
-from urllib.parse import unquote_to_bytes
+
 
 
 
@@ -92,8 +92,8 @@ def signup():
     if userdetails['id'] is not None:
         token=jwt_encode(userdetails)
         session['email']=UM.email
-        """ message="please click  the then link to activate your account" """
-        """ app.send_email(dict(email=UM.email,msg=message, route='confirm_email' ))#send confirmation link email_dict [{ dictionary with email message ,route}]"""
+        message="please click  the then link to activate your account"
+        app.send_email(dict(email=UM.email,msg=message, route='confirm_email' ))#send confirmation link email_dict [{ dictionary with email message ,route}]"""
         data = {'user': userdetails, 'token': token}
         res  = jsonify({"status": 201, 'data': data})
         return make_response(res, 201)
@@ -162,9 +162,9 @@ def make_admin():
     lm.where(dict(email=CE.email))
     if lm.get() is not None:
         lm.update(dict(isAdmin=True), lm.id)
-        res = {'status': 201, 
+        res = {'status': 201,
         'data': {'message':'User have been granted admin rights' ,
-         'user':{'id':lm.id}
+        'user':{'id':lm.id}
          }
          }
     else:
@@ -191,7 +191,7 @@ def change_password():
     email=session['email']
     lm.where(dict(email=email))
     fg=ForgotPass(datadict['newpassword'])
-    if lm.check_exist() is True and lm.id is not None:
+    if lm.get() is not  None and lm.id is not None:
         hashedpas=hash_password(datadict['password'])
         if lm.password==hashedpas:
             newpass=hash_password(fg.password)
@@ -213,7 +213,7 @@ def forgot_password():
     lm=UserLogin()
     email=dict(email=datadict['email'])
     lm.where(email)
-    if lm.check_exist() is True and lm.id is not None:
+    if lm.get() is not  None and lm.id is not None:
         app.send_email(dict(email=datadict['email'], msg='Click the link to recover you password',route='recover_account'))
      
         res = {'Message': 'Email was sent to your account please check',
@@ -261,12 +261,12 @@ def confirm_email(token, email):
     lm=UserLogin()
     
     lm.where(dict(email=email))
-    if lm.check_exist() is True and lm.id is not None:
+    if lm.get() is not  None and lm.id is not None:
         lm.update(dict(active=True), lm.id)
         res = {'status': 202, 'message': "Account activated successfully"}
     else:
-        msg = "Something went wrong, login and try again"
-        res={"status": 404, 'error':msg}
+        msg = "Could not find account with this {} email".format(email)
+        res={"status": 400, 'error':msg}
 
     try:
         

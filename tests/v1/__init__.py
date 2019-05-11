@@ -26,7 +26,7 @@ class BaseTest(unittest.TestCase):
         return result
 
         
-    def auth_request(self, Url, methods, data={}):
+    def auth_request(self, Url, methods, data):
         return self.client().open(Url,  method=methods,
          headers={'Authorization':"Bearer " + self.token},
          data=json.dumps(data))

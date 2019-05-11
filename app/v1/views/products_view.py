@@ -1,5 +1,4 @@
 from app.v1.views import BaseView
-from app.v1.models import BaseModel
 from app.v1.models.products import ProductBase, ProductsModel, Checkservice
 from flask import make_response, abort, jsonify, request, abort, session, url_for
 
@@ -10,6 +9,7 @@ def createproduct():
     msg: 201 created
     """
     datadict = BaseView.get_jsondata()
+    print("________________", datadict)
     fields=[ "services_id" ,"project_name", "project_type", "size", "county", "location",\
          "location_info", "price", "other_information", "image" ]
     Error= ()

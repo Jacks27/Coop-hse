@@ -45,13 +45,11 @@ class Sized(Descriptor):
 
     @staticmethod
     def set_code():
-        return ['if len(value) < self.minlen:\n', \
+        return ['if len(value) < self.minlen:\n',\
             '    msg ="Password too small must be greater than {}".format(self.minlen)\n',
             '    from_setter(msg)']
 class Typed(Descriptor): 
-    """ validate object type
-    Argument ty expected object
-    """
+    """ validate object type Argument ty expected object"""
     ty = object
 
     @staticmethod
@@ -114,8 +112,7 @@ class BaseModelMeta(type):
 
    
 class BaseModel(metaclass=BaseModelMeta):
-    """ 
-    bassmodel that hold all the  function for the rest of the model
+    """ bassmodel that hold all the  function for the rest of the model
     class variables  db.connection , db.connection.cursor
     """
     tbl_colomns = []
@@ -138,7 +135,7 @@ class BaseModel(metaclass=BaseModelMeta):
         self.where_clause = ''
         self.compiled_select = ""
         self.column_names = []
-        self.clean_insert_dict()
+       
         super().__init__()
     def get_record(self):
         """get a rows from the db table"""
@@ -341,29 +338,6 @@ class BaseModel(metaclass=BaseModelMeta):
                 sub_set[key] = value
         return sub_set
 
-    def clean_insert_dict(self, dynamic_dict={}, full=True):
-        """cleans a dictionaly according using table column names
-        Keyword Arguments:
-            dynamic_dict {dict} -- [description] (default: {{}})
-        Returns: [dict] -- [with insertable colums]
-        """
-        query = "SELECT * FROM {} limit 1".format(self.table_name)
-        self.query_excute(query)
-
-        if self.cursor.description is not None:
-            self.column_names = [row[0]for row in self.cursor.description]
-        clean_dict = {}
-        if len(self.column_names) == 0:
-            return dynamic_dict
-        if full is True:
-            for col in self.column_names:
-                clean_dict[col] = dynamic_dict.get(col, None)
-        else:
-            for key, value in dynamic_dict.items():
-                key_l = key.lower()
-                if key_l in self.column_names:
-                    clean_dict[key] = value
-        return clean_dict
 
     def update(self, update_dict, pry_key):
         """pursers update query
