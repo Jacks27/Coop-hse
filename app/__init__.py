@@ -63,4 +63,4 @@ def create_default_admin():
         hashedpass= hash_password(UM.password)
         UM.insert_data(UM.firstname, UM.lastname, UM.othername,\
         UM.email, UM.phonenumber,UM.psnumber , hashedpass)
-        
+    print("_________________________> super user error", Error)

@@ -87,7 +87,7 @@ def signup():
     UM.insert_data(UM.firstname, UM.lastname, UM.othername,\
     UM.email, UM.phonenumber, UM.psnumber, hashedpass)
     userdetails=UM.sub_set()
-    print("___________", userdetails['id'])
+    print("id___________>", userdetails['id'])
     token=''
     if userdetails['id'] is not None:
         token=jwt_encode(userdetails)

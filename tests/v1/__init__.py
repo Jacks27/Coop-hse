@@ -15,10 +15,10 @@ class BaseTest(unittest.TestCase):
     def setUp(self):
         
         db.create_tables()
+        create_default_admin()
         copApp.config.from_object(configs["testing"])
         self.client = copApp.test_client
         self.token = ''
-        create_default_admin()
         self.login()
 
     def post(self, path, data):
