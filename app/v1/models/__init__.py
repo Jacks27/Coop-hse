@@ -279,7 +279,7 @@ class BaseModel(metaclass=BaseModelMeta):
         Returns:
             [type] -- [description]
         """
-        if self.where_clause != '' and self.get() is None:
+        if self.where_clause != '' and self.get() is not None:
             status = False
         else:
             status = True

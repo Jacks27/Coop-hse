@@ -38,7 +38,7 @@ def auth_admin(func):
             secret = Config.SECRET_KEY
             algo = Config.JWT_ALGORITHM
             try:
-                payload = jwt.decode(token, secret, algo)
+                payload = jwt.decode(token, secret, algorithms=algo)
                 isadmin = payload.get('isadmin', False)
                 if isadmin is True:
                     request.user = payload
@@ -67,15 +67,15 @@ def signup():
     UM=UsersModel(firstname, lastname, othername,\
         phonenumber, email, psnumber, password)
     lm.where(dict(email=datadict['email']))
-    if lm.check_exist() is True:
+    if lm.get() is not  None and lm.id is not None:
         Error+=("Account with the following {} email exists".format(datadict['email']),)
     
     lm.where(dict(phonenumber=datadict['phonenumber']))
-    if lm.check_exist() is True:
+    if lm.get() is not  None and lm.id is not None:
         Error+=("Account with the following {} phone number exists".format(datadict['phonenumber']),)
     
     lm.where(dict(phonenumber=datadict['psnumber']))
-    if lm.check_exist() is True:
+    if lm.get() is not  None and lm.id is not None:
         Error+=("Account with the following {}number exists".format(datadict['psnumber']),)
     
     
@@ -85,7 +85,7 @@ def signup():
 
     hashedpass=hash_password(password)
     UM.insert_data(UM.firstname, UM.lastname, UM.othername,\
-    UM.email, UM.phonenumber, UM.psnumber, hashedpass)
+    UM.email, UM.phonenumber, UM.psnumber, hashedpass, False)
     userdetails=UM.sub_set()
     print("id___________>", userdetails['id'])
     token=''
@@ -118,7 +118,7 @@ def login():
     lm=UserLogin()
     BaseView.required_fields_check(fields, datadict)
     lm.where(dict(email=datadict['email']))
-    if lm.check_exist() is True and lm.id is not None:
+    if lm.get() is not None:
         hashpassword= hash_password(datadict['password'])
         if lm.password==hashpassword:
             payload = lm.sub_set()
@@ -152,7 +152,7 @@ def jwt_encode(payload):
     algo = Config.JWT_ALGORITHM
     token = jwt.encode(payload, secret, algo)
     return token.decode('UTF-8')
-
+@auth_admin
 def make_admin():
     datadict=BaseView.get_jsondata()
     fields=['email']
@@ -160,7 +160,7 @@ def make_admin():
     CE=CheckEmail(datadict['email'])
     lm=UserLogin()
     lm.where(dict(email=CE.email))
-    if lm.check_exist() is True and lm.id is not None:
+    if lm.get() is not None:
         lm.update(dict(isAdmin=True), lm.id)
         res = {'status': 201, 
         'data': {'message':'User have been granted admin rights' ,
@@ -171,7 +171,7 @@ def make_admin():
         msg = "User not found"
         res={"status": 204, 'error':msg}
     return make_response(jsonify(res), res['status'])
-
+@auth_admin
 def get_users():
     lm=UserLogin()
     select_cols= lm.tbl_colomns
@@ -236,7 +236,7 @@ def recover_account(token, email):
     s = URLSafeTimedSerializer(Config.SECRET_KEY)
     lm=UserLogin()
     lm.where(dict(email=email))
-    if lm.check_exist() is True and lm.id is not None:
+    if lm.get() is not  None and lm.id is not None:
         newpass=hash_password(datadict['confirmpassword'])
         lm.update(dict(password=newpass), lm.id)
         res = {'status': 202, 'message': "Passwrd was reset successfuly successfully"}

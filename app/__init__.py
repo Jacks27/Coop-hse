@@ -17,8 +17,8 @@ def create_app(config="development"):
     db = SetUpDb(config)
     with app.app_context():
         db.create_tables()
-        create_default_admin()
-
+        
+    create_default_admin()
     app.register_blueprint(my_v1, url_prefix='/app/v1')
     app.secret_key= Config.SECRET_KEY
     
@@ -52,15 +52,15 @@ def create_default_admin():
     phonenumber = os.getenv('ADMIN_PHONENUMBER')
     psnumber = os.getenv('ADMIN_PSNUMBER')
     password = os.getenv('ADMIN_PASSWORD')
-    Error=()
+   
     lm=UserLogin()
-    lm.where(dict(email=email))
-    if lm.check_exist() is True and psnumber is not None:
-        Error+=("Account with the following {}number exists".format(email),)
-    else:
-        UM=UsersModel(firstname, lastname, othername,\
+    
+    UM=UsersModel(firstname, lastname, othername,\
         email, phonenumber, psnumber, password)
+    lm.where(dict(email=email))
+    if lm.get() is None and lm.id is None:
         hashedpass= hash_password(UM.password)
         UM.insert_data(UM.firstname, UM.lastname, UM.othername,\
-        UM.email, UM.phonenumber,UM.psnumber , hashedpass)
-    print("_________________________> super user error", Error)
+        UM.email, UM.phonenumber,UM.psnumber , hashedpass, True)
+        print("yeessssssssssssss")
+   

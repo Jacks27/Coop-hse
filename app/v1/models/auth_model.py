@@ -10,5 +10,5 @@ class UsersModel(BaseModel):
     phonenumber = SizedString(minlen=10)
     psnumber = SizedString(minlen=8)
     password = SizedString(minlen=8)
-    tbl_colomns = ["firstname", "lastname", "othername", "email", "phonenumber", "psnumber", "password"] 
+    tbl_colomns = ["firstname", "lastname", "othername", "email", "phonenumber", "psnumber", "password", "isadmin"] 
     table_name = 'users'

@@ -10,7 +10,6 @@ def createproduct():
     msg: 201 created
     """
     datadict = BaseView.get_jsondata()
-    print("datadict---------------", datadict)
     fields=[ "services_id" ,"project_name", "project_type", "size", "county", "location",\
          "location_info", "price", "other_information", "image" ]
     Error= ()
@@ -24,11 +23,11 @@ def createproduct():
     image)
     pb=ProductBase()
     pb.where(dict(project_name=datadict['project_name']))
-    if pb.check_exist() is True:
+    if pb.get() is not None:
         Error+=("Project with the following {} name exists".format(datadict['project_name']),)
     
     pb.where(dict(image=datadict['image']))
-    if pb.check_exist() is True:
+    if pb.get() is not None:
         Error+=("Image with the following {} details exists".format(datadict['image']),)
     pb.insert_data(datadict['services_id'], pm.project_name, pm.project_type, pm.size, pm.county, pm.location, pm.location_info,\
         pm.price, pm.other_information, image)
@@ -80,7 +79,7 @@ def update_product():
     image)
     pb=ProductBase()
     pb.where(dict(id=Id) )
-    if pb.check_exist() is False:
+    if pb.get()is not None:
         Error+=("Could not find data with Id {}".format(datadict['id']),)
     if isinstance(Id, int) is False:
         Error+=("Id must be an integer")
