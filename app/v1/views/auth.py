@@ -176,6 +176,20 @@ def get_users():
                    'data': Users
                    })
     return make_response(res, 200)
+def get_single_user(userid):
+    userID=userid
+    if isinstance(userID, int):
+        Ul=UserLogin()
+        User=Ul.get_one(id=userID)
+        if Ul.id is not None:
+             res ={"status": 200,
+                    'data': User
+                    }
+    else:
+        res= {"status":404, "Error":"Could not find what you were looking for."}
+    return make_response(jsonify(res), res['status'])
+
+
 
 def change_password():
 
@@ -202,13 +216,12 @@ def change_password():
 
 def forgot_password():
     datadict=BaseView.get_jsondata()
-    session['email']= datadict['email']
     fields=['email']
     BaseView.required_fields_check(fields, datadict)
     lm=UserLogin()
     email=dict(email=datadict['email'])
     lm.where(email)
-    if lm.get() is not  None and lm.id is not None:
+    if lm.check_exist is True:
         app.send_email(dict(email=datadict['email'], msg='Click the link to recover you password',route='recover_account'))
      
         res = {'Message': 'Email was sent to your account please check',
@@ -216,7 +229,7 @@ def forgot_password():
     else:
         res = {
         'error': "Could not find a account with that email. Please sign up",
-        'status': 400
+        'status': 404
         }
     return make_response(jsonify(res), res['status'])
 

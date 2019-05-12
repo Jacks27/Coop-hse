@@ -40,6 +40,21 @@ class TestAuth(BaseTest):
         self.assertEqual(result.status_code, 201)
         datacheck = json.loads(result.data)
         self.check_standard_reply(datacheck, 201)
+    def test_getuser(self):
+        result=self.auth_request('app/v1/get_users', 'GET', data=None)
+        self.assertEqual(result.status_code, 200)
+        datacheck = json.loads(result.data)
+        self.check_standard_reply(datacheck, 200)
+    def get_singeUser(self):
+        result=self.auth_request('app/v1/Users/1', 'GET', data=None)
+        self.assertEqual(result.status_code, 200)
+        datacheck = json.loads(result.data)
+        self.check_standard_reply(datacheck, 200)
+    def get_wrng_user(self):
+        result=self.auth_request('app/v1/Users/4', 'GET', data=None)
+        self.assertEqual(result.status_code, 404)
+        datacheck = json.loads(result.data)
+        self.check_standard_reply(datacheck,404, True)
 
     def test_wrongdetails(self):
         self.user_email['email'] = 'llul@gamil.com'
@@ -50,8 +65,9 @@ class TestAuth(BaseTest):
 
 
     def test_forgot_password(self):
-        result=self.auth_request('app/v1/forgot_password', 'POST', data=self.user_email)
-        self.assertEqual(result.status_code, 200)
+        Userdata={"email":"lyys@gmail.com"}
+        result=self.auth_request('app/v1/forgot_password', 'POST', Userdata)
+        self.assertEqual(result.status_code, 404)
 
     def test_recover_password(self):
         passwords ={

@@ -10,6 +10,8 @@ my_v1.add_url_rule('/forgot_password', view_func=auth.forgot_password, methods=[
 my_v1.add_url_rule('/recover_account/<token>/<email>', view_func=auth.recover_account, methods=['POST','GET'])
 my_v1.add_url_rule('/change_password', view_func=auth.change_password, methods=['POST'])
 my_v1.add_url_rule('/user_info_update', view_func=auth.user_update_info, methods=['PATCH'])
+my_v1.add_url_rule('/User/<int:userid>', view_func=auth.get_single_user, methods=['GET'])
+
 # product blueprints
 my_v1.add_url_rule('/add_project', view_func=products_view.createproduct, methods=['POST'])
 my_v1.add_url_rule('/all_products', view_func=products_view.get_products, methods=['GET'])
