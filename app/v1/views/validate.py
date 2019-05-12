@@ -1,9 +1,9 @@
 """ validate.py """
-from app.v1.models import BaseModel, String, Strpatt, SizedString, Integer, SizedInteger
+from app.v1.models import BaseModel, String, Strpatt, Integer, SizedInteger
 class Validate:
 
     @classmethod
-    def required(cls, data_fields=[], dataDict={}):
+    def required(cls, data_fields, dataDict):
         notFound=[]
 
         if len(data_fields) > 0:

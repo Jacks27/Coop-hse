@@ -3,6 +3,7 @@ import string
 from instance.config import configs
 import unittest
 import json
+from app import create_default_admin
 from app.v1.db_setup import SetUpDb
 from run import copApp
 
@@ -12,7 +13,9 @@ db = SetUpDb(config_name='testing')
 class BaseTest(unittest.TestCase):
     
     def setUp(self):
+        
         db.create_tables()
+        create_default_admin()
         copApp.config.from_object(configs["testing"])
         self.client = copApp.test_client
         self.token = ''
@@ -23,9 +26,9 @@ class BaseTest(unittest.TestCase):
         return result
 
         
-    def auth_request(self, Url, methods, data={}):
+    def auth_request(self, Url, methods, data):
         return self.client().open(Url,  method=methods,
-         headers={'Authorization':"Bearer"+ self.token},
+         headers={'Authorization':"Bearer " + self.token},
          data=json.dumps(data))
 
     def check_standard_reply(self, datacheck, status, error=False):
@@ -47,7 +50,7 @@ class BaseTest(unittest.TestCase):
     @staticmethod
     def generate_admin():
         admin_data = {
-            "email":"lilu@quickmail.rocks"
+            "email":"lilu@quickmail.rocks "
         }
         return admin_data
 
@@ -61,8 +64,10 @@ class BaseTest(unittest.TestCase):
                 "psnumber":"https://www.xmicrosoft.com",
                 "password": "jacks278"
             }
-
+     
     
+    
+
     def login(self):
         login_data = {
             "email":"lilu@quickmail.rocks",
@@ -75,8 +80,7 @@ class BaseTest(unittest.TestCase):
         
         if data['data']['token']:
             self.token = data['data']['token']
-        print('______', self.token)
+        print('______>token', self.token)
         return login_data
         
-    def tearDown(self):
-        db.drop_tables()
+

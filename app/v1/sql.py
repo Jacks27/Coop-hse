@@ -6,7 +6,7 @@ table_create_sql = [
                 othername  VARCHAR(55),
                 email TEXT UNIQUE NOT NULL,
                 phoneNumber VARCHAR(15),
-                passportUrlString TEXT NOT NULL,
+                psnumber TEXT NOT NULL,
                 password TEXT  NOT NULL,
                 isAdmin  BOOLEAN NOT NULL DEFAULT FALSE,
                 createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

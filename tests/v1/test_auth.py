@@ -32,10 +32,12 @@ class TestAuth(BaseTest):
         result = self.auth_request('app/v1/create_admin', 'PATCH', data)
         self.assertEqual(result.status_code, 201)
         datacheck = json.loads(result.data)
+
         self.check_standard_reply(datacheck, 201)
+
     def test_forgot_password(self):
         data = {
-            "email": "lilu@quickdmail.rocks"
+            "email": "lilu@quickgmail.rocks"
             }
         result = self.auth_request('app/v1/forgot_password', 'POST', data)
         self.assertEqual(result.status_code, 400)
@@ -51,7 +53,12 @@ class TestAuth(BaseTest):
         self.assertEqual(result.status_code, 403)
         datacheck = json.loads(result.data)
         self.check_standard_reply(datacheck, 403, True)
-        
-        
+
+    def test_confirmEmail(self):
+        data=None
+        result = self.auth_request('app/v1/confirm_email/Imh1YnVodXR1c2FAcm95YWxtYXJrZXQub25saW5lIg.XMouRw.81GP9i44qBDxdZr8TzInSLSVe5w/hubuhutusa%40royalmarket.online', 'POST', data)
+        self.assertEqual(result.status_code,400)
+        datacheck = json.loads(result.data)
+        self.check_standard_reply(datacheck, 400, True)
 
 

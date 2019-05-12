@@ -1,13 +1,34 @@
-language: 
-    - python
+language: python
 python:
-    - "3.6.7"
-    - "3.5"
+  - '3.6' 
+
 install:
     - pip install -r requirements.txt
     - pip install nose
-@@ -13,4 +13,4 @@ script:
+    - pip install coverage
+    - pip install coveralls
+before_script:
+    
+    - export FLASK_APP=run.py
+    - export FLASK_DEBUG=1
+    - export FLASK_ENV=development
+    - export MAIL_SERVER='smtp.gmail.com'
+    - export ADMIN_EMAIL='lilu@quickmail.rocks'
+    - export ADMIN_FIRST_NAME='admin'
+    - export ADMIN_LAST_NAME='default'
+    - export ADMIN_PASSWORD='jacks278'
+    - export ADMIN_OTHERNAME='kariuki'
+    - export ADMIN_PHONENUMBER='07243834834'
+    - export ADMIN_PSNUMBER='https://www.xmsicrosoft.com'
+    - psql -c 'create database cop_bnk_hsing;' -U postgres
+
+services:
+    - postgresql
+
+script:
     - nosetests --with-coverage --cover-package=app
+
 after_success:
     - coveralls
     - codecov
+   

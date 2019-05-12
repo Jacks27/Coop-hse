@@ -1,6 +1,6 @@
 from app.v1.models.servicesmodel import ServiceModel
 from app.v1.views import BaseView
-from flask import make_response, abort, jsonify, request, abort, session, url_for
+from flask import make_response, abort, jsonify, request, session, url_for
 
 def createservice():
     """create services  """

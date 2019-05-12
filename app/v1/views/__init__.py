@@ -23,7 +23,7 @@ class  BaseView(Validate):
         return data
 
     @classmethod
-    def required_fields_check(cls, fields=[], datadict={}):
+    def required_fields_check(cls, fields, datadict):
         """ Check all required fields in submited data
         uses validate class
         Arguments :
