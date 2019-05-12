@@ -57,8 +57,8 @@ class TestAuth(BaseTest):
     def test_confirmEmail(self):
         data=None
         result = self.auth_request('app/v1/confirm_email/Imh1YnVodXR1c2FAcm95YWxtYXJrZXQub25saW5lIg.XMouRw.81GP9i44qBDxdZr8TzInSLSVe5w/hubuhutusa%40royalmarket.online', 'POST', data)
-        self.assertEqual(result.status_code,403)
+        self.assertEqual(result.status_code,400)
         datacheck = json.loads(result.data)
-        self.check_standard_reply(datacheck, 403, True)
+        self.check_standard_reply(datacheck, 400, True)
 
 

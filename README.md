@@ -8,7 +8,6 @@ This is a website interface that allows user to view products details about Coop
 ## Usage
 
 1. Check it out [here](https://jacks27.github.io/Coop-hse/UI/)!
-
 2. clone the repo Open index.html using a browser.
 
 ## Uses

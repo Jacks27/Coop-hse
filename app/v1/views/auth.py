@@ -274,5 +274,5 @@ def confirm_email(token, email):
         
     except SignatureExpired:
         msg = "Activation link has expired , please reset your account"
-        res={'status': 403, 'error':msg}
+        
     return make_response(jsonify(res), res['status'])
