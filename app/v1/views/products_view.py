@@ -9,7 +9,6 @@ def createproduct():
     msg: 201 created
     """
     datadict = BaseView.get_jsondata()
-    print("________________", datadict)
     fields=[ "services_id" ,"project_name", "project_type", "size", "county", "location",\
          "location_info", "price", "other_information", "image" ]
     Error= ()
@@ -23,22 +22,24 @@ def createproduct():
     image)
     pb=ProductBase()
     pb.where(dict(project_name=datadict['project_name']))
-    if pb.get() is not None:
+    if pb.check_exist is True:
         Error+=("Project with the following {} name exists".format(datadict['project_name']),)
     
     pb.where(dict(image=datadict['image']))
-    if pb.get() is not None:
+    if pb.check_exist is True:
         Error+=("Image with the following {} details exists".format(datadict['image']),)
-    pb.insert_data(datadict['services_id'], pm.project_name, pm.project_type, pm.size, pm.county, pm.location, pm.location_info,\
-        pm.price, pm.other_information, image)
-    userdetails=pb.sub_set()
     if len(Error)> 0:
         res = jsonify({'error': ",".join(Error), 'status': 400})
         return abort(make_response(res, 400))
 
+    pb.insert_data(datadict['services_id'], pm.project_name, pm.project_type, pm.size, pm.county, pm.location, pm.location_info,\
+        pm.price, pm.other_information, image)
+    userdetails=pb.sub_set()
+    
+
     if pb.id is not None:
         
-        data = {'Item': userdetails, 'msg':"Item was added successfully"}
+        data = {'Item': userdetails, 'msg':"Item was added."}
         res  = jsonify({"status": 201, 'data': data})
         return make_response(res, 201)
     return  make_response(jsonify({"Error": 'Oops somthing went wrong'}), 500)
@@ -79,7 +80,7 @@ def update_product():
     image)
     pb=ProductBase()
     pb.where(dict(id=Id) )
-    if pb.get()is not None:
+    if pb.get() is not None:
         Error+=("Could not find data with Id {}".format(datadict['id']),)
     if isinstance(Id, int) is False:
         Error+=("Id must be an integer")
@@ -101,11 +102,11 @@ def update_product():
         image=image
         ), Id)
 
-    productdetails=pb.sub_set()
+    updatedetails=pb.sub_set()
 
-    if pb.id is not None:
+    if updatedetails is not None:
         
-        data = {'Item': productdetails, 'msg':"Item was Updated successfully"}
+        data = {'Item': updatedetails, 'msg':"Items Updated successfuly"}
         res  = jsonify({"status": 201, 'data': data})
         return make_response(res, 201)
     return  make_response(jsonify({"Errro": 'Oops somthing went wrong'}), 500)
@@ -128,7 +129,7 @@ def deleteproduct(product_id):
     if productexist is not None:
         pb.delete(product_id)
         res = {'status': 200,
-                   'data': {'message': "Product deleted successfully"}
+                   'data': {'message': "Product deleted!"}
                    }
     else:
         res = {"status": 404,
@@ -137,25 +138,25 @@ def deleteproduct(product_id):
 
 def checked_soldout(product_id):
     Id=product_id
-    Error= ()
+    ErrorMsg= ()
     pb=ProductBase()
     pb.where(dict(id=Id))
     if pb.check_exist() is False:
-        Error +=("Could not find data with Id {}".format(Id),)
+        ErrorMsg +=("Could not find data with Id {}".format(Id),)
     if isinstance(Id, int) is False:
-        Error+=("Id must be an integer")
-    if len(Error)> 0:
-        res = jsonify({'error': ",".join(Error), 'status': 400})
+        ErrorMsg+=("Id must be an integer")
+    if len(ErrorMsg)> 0:
+        res = jsonify({'error': ",".join(ErrorMsg), 'status': 400})
         return abort(make_response(res, 400))
     pb.update(dict(sold_out=True), product_id)
 
     productdetails=pb.sub_set()
-    if pb.id is not None:
+    if productdetails is not None:
         
-        data = {'Item': productdetails, 'msg':"Item was Updated successfully"}
+        data = {'Item': productdetails, 'msg':"Item check as sold out"}
         res  = jsonify({"status": 201, 'data': data})
         return make_response(res, 201)
-    return  make_response(jsonify({"Errro": 'Oops somthing went wrong'}), 500)
+    return  make_response(jsonify({"Error": 'Somthing went wrong. Operation could not be complited'}), 500)
 
 
 

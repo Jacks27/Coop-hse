@@ -6,8 +6,8 @@ from flask import jsonify, abort, make_response
 import re
 db = SetUpDb()
 def from_setter(msg):
-    res =jsonify({'status':400, 'error':msg})
-    return abort(make_response(res, 400))
+    res =jsonify({'status':403, 'error':msg})
+    return abort(make_response(res, 403))
 
 def _make_setter(dcls):
 	code = 'def __set__(self, instance, value):\n'
@@ -276,7 +276,7 @@ class BaseModel(metaclass=BaseModelMeta):
         Returns:
             [type] -- [description]
         """
-        if self.where_clause != '' and self.get() is not None:
+        if self.where_clause != '' and self.get() is None:
             status = False
         else:
             status = True

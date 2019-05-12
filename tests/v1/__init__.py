@@ -80,6 +80,7 @@ class BaseTest(unittest.TestCase):
         
         if data['data']['token']:
             self.token = data['data']['token']
+            
         print('______>token', self.token)
         return login_data
         

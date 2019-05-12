@@ -4,7 +4,7 @@ import hashlib
 from flask import make_response, abort, jsonify, request, session, url_for
 from app.v1.models.auth_model import UsersModel
 from app.v1.models.auth_login import UserLogin,ForgotPass
-from app.v1.views.validate import Validate, CheckEmail
+from app.v1.views.validate import Validate, CheckEmail, CheckInteger, CheckString
 from app.v1.views import BaseView
 from app.v1.models import BaseModel
 import jwt
@@ -67,18 +67,16 @@ def signup():
     UM=UsersModel(firstname, lastname, othername,\
         phonenumber, email, psnumber, password)
     lm.where(dict(email=datadict['email']))
-    if lm.get() is not  None and lm.id is not None:
+    if lm.check_exist() is True:
         Error+=("Account with the following {} email exists".format(datadict['email']),)
     
     lm.where(dict(phonenumber=datadict['phonenumber']))
-    if lm.get() is not  None and lm.id is not None:
+    if lm.check_exist() is True:
         Error+=("Account with the following {} phone number exists".format(datadict['phonenumber']),)
     
     lm.where(dict(phonenumber=datadict['psnumber']))
-    if lm.get() is not  None and lm.id is not None:
+    if lm.check_exist() is True:
         Error+=("Account with the following {}number exists".format(datadict['psnumber']),)
-    
-    
     if len(Error)> 0:
         res = jsonify({'error': ",".join(Error), 'status': 400})
         return abort(make_response(res, 400))
@@ -87,7 +85,6 @@ def signup():
     UM.insert_data(UM.firstname, UM.lastname, UM.othername,\
     UM.email, UM.phonenumber, UM.psnumber, hashedpass, False)
     userdetails=UM.sub_set()
-    print("id___________>", userdetails['id'])
     token=''
     if userdetails['id'] is not None:
         token=jwt_encode(userdetails)
@@ -160,7 +157,7 @@ def make_admin():
     CE=CheckEmail(datadict['email'])
     lm=UserLogin()
     lm.where(dict(email=CE.email))
-    if lm.get() is not None:
+    if lm.check_exist() is True:
         lm.update(dict(isAdmin=True), lm.id)
         res = {'status': 201,
         'data': {'message':'User have been granted admin rights' ,
@@ -169,7 +166,7 @@ def make_admin():
          }
     else:
         msg = "User not found"
-        res={"status": 204, 'error':msg}
+        res={"status": 404, 'error':msg}
     return make_response(jsonify(res), res['status'])
 @auth_admin
 def get_users():
@@ -196,7 +193,7 @@ def change_password():
         if lm.password==hashedpas:
             newpass=hash_password(fg.password)
             lm.update(dict(password = newpass), lm.id)
-            res = {'status': 202, 'message': "password updated successfully"}
+            res = {'status': 202, 'message': "password updated successfuly"}
         else:
             msg = "wrong password try again"
             res={"status": 404, 'error':msg }
@@ -239,7 +236,7 @@ def recover_account(token, email):
     if lm.get() is not  None and lm.id is not None:
         newpass=hash_password(datadict['confirmpassword'])
         lm.update(dict(password=newpass), lm.id)
-        res = {'status': 202, 'message': "Passwrd was reset successfuly successfully"}
+        res = {'status': 202, 'message': "Passwrd was reset successfuly"}
     else:
         msg = "Something went wrong, login and try again"
         res={"status": 404, 'error':msg}
@@ -263,7 +260,7 @@ def confirm_email(token, email):
     lm.where(dict(email=email))
     if lm.get() is not  None and lm.id is not None:
         lm.update(dict(active=True), lm.id)
-        res = {'status': 202, 'message': "Account activated successfully"}
+        res = {'status': 202, 'message': "Account is now activated"}
     else:
         msg = "Could not find account with this {} email".format(email)
         res={"status": 400, 'error':msg}
@@ -275,4 +272,48 @@ def confirm_email(token, email):
     except SignatureExpired:
         msg = "Activation link has expired , please reset your account"
         
+    return make_response(jsonify(res), res['status'])
+    
+def user_update_info():
+    """Updates User information account
+    Update [{firstname, lastname, otherbane, phonenumber, Pfnumber}]
+    """
+    datadict = BaseView.get_jsondata()
+   
+    fields_updates=["id", "firstname", "lastname", "othername", "email","phonenumber"\
+        , "psnumber", "password"]
+    BaseView.required_fields_check(fields_updates, datadict)
+    lm=UserLogin()
+    Error= ()
+    id,firstname, lastname, othername,email, phonenumber, psnumber, password =\
+    [val for val in datadict.values()]
+    email2=session.get('email')
+    print("=========================================", email2)
+    if session.get('email') != datadict['email']:
+            Error+=(" Could not perform this action",)
+        
+    if len(Error)> 0:
+        res = jsonify({'error': ",".join(Error), 'status': 403})
+        return abort(make_response(res, 403))
+
+    lm.where(dict(email=datadict['email']))
+    id=datadict['id']
+    if lm.check_exist() is True and id==lm.id:
+        BaseView.required_fields_check(fields_updates, datadict)
+
+        UsersModel(firstname, lastname, othername,\
+            email, phonenumber, psnumber, password)
+
+        lm.update(dict(
+            firstname = firstname, 
+            lastname=lastname,
+            othername=othername,
+            phonenumber=phonenumber, 
+            psnumber=psnumber, 
+            ), id)
+        msg= "Information updated successfuly"
+        res={"status": 200, 'Error':msg }
+    else:
+        msg="Sorry could not Update your details contact the Admin"
+        res={"status": 401, 'Error':msg }
     return make_response(jsonify(res), res['status'])
