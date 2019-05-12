@@ -311,9 +311,9 @@ class BaseModel(metaclass=BaseModelMeta):
         Arguments:
             id {[type]} -- [description]
         """
-        if id is None and self.where_clause == '':
+        if itenid is None and self.where_clause == '':
             return False
-        self.where({self.primary_key: id})
+        self.where({self.primary_key: itenid})
         query = "DELETE FROM {} ".format(self.table_name)
         query += self.where_clause
         self.query_excute(query, True)

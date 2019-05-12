@@ -148,13 +148,3 @@ def checked_soldout(product_id):
         res  = jsonify({"status": 201, 'data': data})
         return make_response(res, 201)
     return  make_response(jsonify({"Error": 'Somthing went wrong. Operation could not be complited'}), 500)
-
-
-
-
-
-
-
-
-
-

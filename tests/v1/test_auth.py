@@ -50,7 +50,7 @@ class TestAuth(BaseTest):
 
 
     def test_forgot_password(self):
-        result = self.auth_request('app/v1/forgot_password', 'POST', data=self.user_email)
+        result=self.auth_request('app/v1/forgot_password', 'POST', data=self.user_email)
         self.assertEqual(result.status_code, 200)
 
     def test_recover_password(self):
