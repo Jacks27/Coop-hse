@@ -1,7 +1,6 @@
 import json
 from tests.v1 import BaseTest
-from flask import session
-from run import copApp
+
 
 class TestAuth(BaseTest):
     user_email={
@@ -14,6 +13,7 @@ class TestAuth(BaseTest):
         self.assertEqual(result.status_code, 201)
         datacheck = json.loads(result.data)
         self.check_standard_reply(datacheck, 201)
+
     def test_signup_wrongdata(self):
         data = self.generate_random_user()
         data['email']= "jacks.com"
@@ -69,7 +69,6 @@ class TestAuth(BaseTest):
         self.assertEqual(result.status_code,400)
         datacheck = json.loads(result.data)
         self.check_standard_reply(datacheck, 400, True)
-    
     def test_update_users(self):
         data =self.generate_random_user()
         data.update({"id": 1})

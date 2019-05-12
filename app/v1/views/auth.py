@@ -1,12 +1,11 @@
 
 import datetime
 import hashlib
-from flask import make_response, abort, jsonify, request, session, url_for
+from flask import make_response, abort, jsonify, request, session
 from app.v1.models.auth_model import UsersModel
 from app.v1.models.auth_login import UserLogin,ForgotPass
-from app.v1.views.validate import Validate, CheckEmail, CheckInteger, CheckString
+from app.v1.views.validate import CheckEmail, CheckInteger
 from app.v1.views import BaseView
-from app.v1.models import BaseModel
 import jwt
 from instance.config import Config
 from functools import wraps
@@ -59,7 +58,7 @@ def signup():
         , "psnumber", "password"]
     Error= ()
     BaseView.required_fields_check(fields, datadict)
-    lm=UserLogin()  
+    lm=UserLogin()
     firstname, lastname, othername, phonenumber, email, psnumber, password =\
     [val for val in datadict.values()]
 
@@ -107,8 +106,7 @@ def hash_password(password):
     """
 
     hash_object = hashlib.md5(password.encode())
-    return hash_object.hexdigest() 
-
+    return hash_object.hexdigest()
 def login():
     datadict = BaseView.get_jsondata()
     fields =["email", "password"]
@@ -285,10 +283,10 @@ def user_update_info():
     BaseView.required_fields_check(fields_updates, datadict)
     lm=UserLogin()
     Error= ()
-    id,firstname, lastname, othername,email, phonenumber, psnumber, password =\
+    userid ,firstname, lastname, othername,email, phonenumber, psnumber, password =\
     [val for val in datadict.values()]
-    email2=session.get('email')
-    print("=========================================", email2)
+   
+    
     if session.get('email') != datadict['email']:
             Error+=(" Could not perform this action",)
         
@@ -298,18 +296,14 @@ def user_update_info():
 
     lm.where(dict(email=datadict['email']))
     id=datadict['id']
-    if lm.check_exist() is True and id==lm.id:
+    if lm.check_exist() is True and userid==lm.id:
         BaseView.required_fields_check(fields_updates, datadict)
 
         UsersModel(firstname, lastname, othername,\
             email, phonenumber, psnumber, password)
 
-        lm.update(dict(
-            firstname = firstname, 
-            lastname=lastname,
-            othername=othername,
-            phonenumber=phonenumber, 
-            psnumber=psnumber, 
+        lm.update(dict(firstname = firstname,lastname=lastname,thername=othername,\
+            phonenumber=phonenumber,psnumber=psnumber, 
             ), id)
         msg= "Information updated successfuly"
         res={"status": 200, 'Error':msg }

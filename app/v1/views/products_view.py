@@ -1,6 +1,6 @@
 from app.v1.views import BaseView
-from app.v1.models.products import ProductBase, ProductsModel, Checkservice
-from flask import make_response, abort, jsonify, request, abort, session, url_for
+from app.v1.models.products import ProductBase, ProductsModel
+from flask import make_response, jsonify, request, abort, session, url_for
 
 def createproduct():
     """create product  
@@ -89,19 +89,10 @@ def update_product():
         return abort(make_response(res, 400))
 
  
-    pb.update(dict(
-        services_id = services_id, 
-        project_name=project_name,
-        project_type=project_type,
-        size=size, 
-        county=county,
-        location= location,
-        location_info=location_info,
-        price=price,
-        other_information= datadict['other_information'],\
-        image=image
-        ), Id)
-
+    pb.update(dict(services_id = services_id,roject_name=project_name, project_type=project_type,\
+        size=size, county=county,location= location,location_info=location_info, price=price,\
+            other_information= datadict['other_information'],\
+            image=image), Id)
     updatedetails=pb.sub_set()
 
     if updatedetails is not None:

@@ -45,7 +45,3 @@ class SetUpDb:
         for query in table_create_sql:
                 self.cursor.execute(query)
                 self.commit()
-
-        
-
-    

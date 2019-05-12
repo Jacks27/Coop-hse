@@ -1,5 +1,5 @@
 """ validate.py """
-from app.v1.models import BaseModel, String, Strpatt, Integer, Float
+from app.v1.models import BaseModel, String, Strpatt, Integer
 class Validate():
 
     @classmethod

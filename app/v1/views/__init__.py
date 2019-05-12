@@ -32,13 +32,10 @@ class  BaseView(Validate):
 
         Retuens:
         A [bool] if all the fields exists
-        a [http exit] if any field is missing        
+        a [http exit] if any field is missing      
         """
         validRequired = cls.required(data_fields=fields, dataDict=datadict)
         if validRequired['status'] is False:
             msg = validRequired['res']
             res = jsonify({'status':400, 'error': msg})
             return abort(make_response(res, 400))
-        
-   
-    
