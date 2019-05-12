@@ -1,4 +1,4 @@
-from app.v1.models import BaseModel, String, Strpatt, SizedString, Integer, Float, SizedInteger
+from app.v1.models import BaseModel, String, Strpatt, SizedString, Integer, Float
 
 class ProductsModel(BaseModel):
     services_id = Integer()

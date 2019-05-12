@@ -53,8 +53,8 @@ class BaseTest(unittest.TestCase):
             "email":"lilu@quickmail.rocks "
         }
         return admin_data
-
-    def generate_random_user( self):
+    @staticmethod
+    def generate_random_user():
         return {
                 "firstname":"jackson",
                 "lastname":"kariuki",
@@ -64,10 +64,6 @@ class BaseTest(unittest.TestCase):
                 "psnumber":"https://www.xmicrosoft.com",
                 "password": "jacks278"
             }
-     
-    
-    
-
     def login(self):
         login_data = {
             "email":"lilu@quickmail.rocks",
@@ -80,7 +76,4 @@ class BaseTest(unittest.TestCase):
         
         if data['data']['token']:
             self.token = data['data']['token']
-        print('______>token', self.token)
         return login_data
-        
-

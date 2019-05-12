@@ -1,6 +1,6 @@
 from app.v1.models.servicesmodel import ServiceModel
 from app.v1.views import BaseView
-from flask import make_response, abort, jsonify, request, session, url_for
+from flask import make_response, abort, jsonify
 
 def createservice():
     """create services  """
@@ -16,8 +16,7 @@ def createservice():
     sm.insert_data(water, electricity, roads)
     serviceid=sm.sub_set()
 
-    if sm.id is not None:
-        
+    if sm.id is not None: 
         data = {'Item': serviceid, 'msg':"Item was added successfully"}
         res  = jsonify({"status": 201, 'data': data})
         return make_response(res, 201)

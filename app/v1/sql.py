@@ -10,9 +10,7 @@ table_create_sql = [
                 password TEXT  NOT NULL,
                 isAdmin  BOOLEAN NOT NULL DEFAULT FALSE,
                 createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updatedAt  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                );""",
-        
+                updatedAt  TIMESTAMP DEFAULT CURRENT_TIMESTAMP);""",
        """ CREATE  TABLE IF NOT EXISTS services(
             id SERIAL PRIMARY KEY,
             water BOOLEAN DEFAULT True,

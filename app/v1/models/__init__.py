@@ -6,8 +6,8 @@ from flask import jsonify, abort, make_response
 import re
 db = SetUpDb()
 def from_setter(msg):
-    res =jsonify({'status':400, 'error':msg})
-    return abort(make_response(res, 400))
+    res =jsonify({'status':403, 'error':msg})
+    return abort(make_response(res, 403))
 
 def _make_setter(dcls):
 	code = 'def __set__(self, instance, value):\n'
@@ -144,7 +144,7 @@ class BaseModel(metaclass=BaseModelMeta):
         BaseModel.query_excute(query)
         result = self.cursor.fetchone()
         return result
-    def select(self, fields=[]):
+    def select(self, fields=None):
         """Builds the select part of the query
         Keyword Arguments:
             fields {str} -- [fields to select] (default: {"*"})
@@ -247,7 +247,7 @@ class BaseModel(metaclass=BaseModelMeta):
             except psycopg2.ProgrammingError as errorx:
                 result = None
                 self.errors.append(errorx)
-        elif type(number) == int:
+        elif isinstance(number, int):
             result = self.cursor.fetchmany(number)
         else:
             result = self.cursor.fetchall()
@@ -276,7 +276,7 @@ class BaseModel(metaclass=BaseModelMeta):
         Returns:
             [type] -- [description]
         """
-        if self.where_clause != '' and self.get() is not None:
+        if self.where_clause != '' and self.get() is None:
             status = False
         else:
             status = True
@@ -298,22 +298,22 @@ class BaseModel(metaclass=BaseModelMeta):
 
         return self.compiled_select
         
-    def add_result_to_self(self, result={}):
+    def add_result_to_self(self, result):
         """Adds a dictionary to self as a valiable
         Keyword Arguments:
             result {dict} -- [description] (default: {{}})
         """
         self.__dict__.update(result)
 
-    def delete(self, id=None):
+    def delete(self, itenid=None):
         """Deletes an item from the db
 
         Arguments:
             id {[type]} -- [description]
         """
-        if id is None and self.where_clause == '':
+        if itenid is None and self.where_clause == '':
             return False
-        self.where({self.primary_key: id})
+        self.where({self.primary_key: itenid})
         query = "DELETE FROM {} ".format(self.table_name)
         query += self.where_clause
         self.query_excute(query, True)

@@ -26,7 +26,7 @@ def create_app(config="development"):
     return app
 
 
-def send_email(email_dict={}):
+def send_email(email_dict):
     """this method is used to send email in all class and functions
     Arguments:
    email_dict [{ dictionary with email message ,route}]
@@ -52,9 +52,7 @@ def create_default_admin():
     phonenumber = os.getenv('ADMIN_PHONENUMBER')
     psnumber = os.getenv('ADMIN_PSNUMBER')
     password = os.getenv('ADMIN_PASSWORD')
-   
     lm=UserLogin()
-    
     UM=UsersModel(firstname, lastname, othername,\
         email, phonenumber, psnumber, password)
     lm.where(dict(email=email))

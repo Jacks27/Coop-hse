@@ -1,6 +1,6 @@
 """ validate.py """
-from app.v1.models import BaseModel, String, Strpatt, Integer, SizedInteger
-class Validate:
+from app.v1.models import BaseModel, String, Strpatt, Integer
+class Validate():
 
     @classmethod
     def required(cls, data_fields, dataDict):
@@ -23,3 +23,13 @@ class Validate:
 class CheckEmail(BaseModel):
     """ validate string only """
     email = Strpatt(pat=r"\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?")
+class CheckInteger(BaseModel):
+    """ Validate integer values
+    Returns:{Error value must be <str>}
+    """
+    Number=Integer()
+class CheckString(BaseModel):
+    """validate string values
+    Returns:{Error value must be <int>}
+    """
+    string=String()
