@@ -214,22 +214,6 @@ a:focus {
   color: #556877;
   width: 50%;
 }
-.back-to-top {
-  position: fixed;
-  display: none;
-  background: #007bff;
-  color: #fff;
-  width: 44px;
-  height: 44px;
-  text-align: center;
-  line-height: 1;
-  font-size: 16px;
-  border-radius: 50%;
-  right: 15px;
-  bottom: 15px;
-  transition: background 0.5s;
-  z-index: 11;
-}
 
 #header.header-pages {
   height: 60px;
@@ -242,19 +226,24 @@ a:focus {
   color: #fff;
   width: 44px;
   height: 44px;
+  border-radius: 50%;
   text-align: center;
   line-height: 1;
   font-size: 16px;
-  border-radius: 50%;
   right: 15px;
   bottom: 15px;
   transition: background 0.5s;
   z-index: 11;
 }
 .back-to-top i {
-  padding-top: 12px; 
+  padding-top: 12px;
   color: #fff;
 }
+.back-to-top p {
+  padding-top: 12px;
+  color: #fff;
+}
+span
 
 #services {
   padding: 60px 0 40px 0;
@@ -766,10 +755,12 @@ tr:nth-child(even) {
 /* nave top right */
 .topnav-right {
   float: right;
+
 }
 .topnav-right a{
   padding: 4px;
   color: white;
+  
 }
 /* login_form section */
 .login_form input[type=text]{
