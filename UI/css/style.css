@@ -1,5 +1,5 @@
 body {
-     background-color: rgb(189, 189, 196);
+    background:  rgba(209, 209, 212, 0.945);
     font-family: "Open Sans", sans-serif;
   }
 
@@ -36,15 +36,17 @@ a:focus {
   position: relative;
   background-color: #137c059f; 
   background-size: cover;
-  padding: 200px 0 120px 0;
+  padding: 65px 0 120px 0;
 }
 
 #intro .intro-img {
+  padding-top: 100px;
   width: 50%;
   float: right;
 }
 
 #intro .intro-info {
+  
   width: 50%;
   float: left;
 }
@@ -214,22 +216,6 @@ a:focus {
   color: #556877;
   width: 50%;
 }
-.back-to-top {
-  position: fixed;
-  display: none;
-  background: #007bff;
-  color: #fff;
-  width: 44px;
-  height: 44px;
-  text-align: center;
-  line-height: 1;
-  font-size: 16px;
-  border-radius: 50%;
-  right: 15px;
-  bottom: 15px;
-  transition: background 0.5s;
-  z-index: 11;
-}
 
 #header.header-pages {
   height: 60px;
@@ -242,19 +228,24 @@ a:focus {
   color: #fff;
   width: 44px;
   height: 44px;
+  border-radius: 50%;
   text-align: center;
   line-height: 1;
   font-size: 16px;
-  border-radius: 50%;
   right: 15px;
   bottom: 15px;
   transition: background 0.5s;
   z-index: 11;
 }
 .back-to-top i {
-  padding-top: 12px; 
+  padding-top: 12px;
   color: #fff;
 }
+.back-to-top p {
+  padding-top: 12px;
+  color: #fff;
+}
+span
 
 #services {
   padding: 60px 0 40px 0;
@@ -313,7 +304,7 @@ a:focus {
 
 #why-us {
   padding: 60px 0;
-  background: white;
+  background:  rgba(209, 209, 212, 0.945);
 }
 
 #why-us .section-header h3,
@@ -688,9 +679,10 @@ a:focus {
   }
 
   #intro .intro-img {
-    width: 80%;
+    width: 50%;
     float: none;
-    margin: 0 auto 25px auto;
+    margin: 0 auto 5px auto;
+    margin-top: 5px;
   }
 
   #intro .intro-info {
@@ -766,10 +758,12 @@ tr:nth-child(even) {
 /* nave top right */
 .topnav-right {
   float: right;
+
 }
 .topnav-right a{
   padding: 4px;
   color: white;
+  
 }
 /* login_form section */
 .login_form input[type=text]{
