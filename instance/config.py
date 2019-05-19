@@ -15,6 +15,9 @@ class Config:
     MAIL_PASSWORD = os.environ["MAIL_PASSWORD"]
     MAIL_USE_SSL=True
     MAIL_USE_TLS=False
+    UPLOADS_DEFAULT_URL= os.environ["UPLOADS_DEFAULT_URL"]
+    UPLOADED_IMAGES_DEST=os.environ["UPLOADS_DEFAULT_DEST"]
+   
 class DevelopmentConfig(Config):
     os.environ["FLASK_ENV"] = 'development'
 

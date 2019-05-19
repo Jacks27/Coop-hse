@@ -1,6 +1,6 @@
 "app/__init__.py"
 import os
-from flask  import Flask, url_for
+from flask  import Flask, url_for, request
 from app.v1.db_setup import SetUpDb
 from instance.config import configs, Config
 from flask_mail import Mail, Message
@@ -9,6 +9,7 @@ from app.v1.models.auth_login import UserLogin
 from app.v1.models.auth_model import UsersModel
 from itsdangerous import URLSafeTimedSerializer
 from app.v1.views.auth import hash_password
+from flask_uploads import UploadSet, configure_uploads, IMAGES
 
 
 def create_app(config="development"):
@@ -21,7 +22,10 @@ def create_app(config="development"):
     create_default_admin()
     app.register_blueprint(my_v1, url_prefix='/app/v1')
     app.secret_key= Config.SECRET_KEY
-    
+    app.config['UPLOADED_IMAGES_DEST']='../UI/images'
+    images = UploadSet('images', IMAGES)
+    configure_uploads(app, images)
+       
 
     return app
 
@@ -60,5 +64,16 @@ def create_default_admin():
         hashedpass= hash_password(UM.password)
         UM.insert_data(UM.firstname, UM.lastname, UM.othername,\
         UM.email, UM.phonenumber,UM.psnumber , hashedpass, True)
-        print("yeessssssssssssss")
+
+def upload_image():
+    
+    app = create_app() 
+    
+    images = UploadSet('images', IMAGES)
+    configure_uploads(app, images)
+    if request.method=='POST' and "image" in request.files:
+        filename=images.save(request.files['image'])
+        url=images.url(filename)
+        return url
+    return False
    

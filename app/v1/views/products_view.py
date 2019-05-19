@@ -1,7 +1,7 @@
 from app.v1.views import BaseView
 from app.v1.models.products import ProductBase, ProductsModel
 from flask import make_response, jsonify, request, abort, session, url_for
-
+import app
 def createproduct():
     """create product  
     Responce :
@@ -9,6 +9,17 @@ def createproduct():
     msg: 201 created
     """
     datadict = BaseView.get_jsondata()
+    Error= ()
+    upload_image= app.upload_image()
+    print("_______________>", upload_image)
+    if app.upload_image():
+        datadict['image']=upload_image
+    else:
+        Error+=("could not upload the image",)
+        res = jsonify({'error': ",".join(Error), 'status': 500})
+        return abort(make_response(res, 500))
+        
+
     fields=[ "services_id" ,"project_name", "project_type", "size", "county", "location",\
          "location_info", "price", "other_information", "image" ]
     Error= ()
@@ -17,8 +28,8 @@ def createproduct():
         location_info, price, other_information, image =[val for val in datadict.values()]
 
     
-    pm=ProductsModel(services_id, project_name, project_type, size, \
-        county, location, location_info,price, other_information,\
+    pm=ProductsModel(int(services_id), project_name, project_type, size, \
+        county, location, location_info,float(price), other_information,\
     image)
     pb=ProductBase()
     pb.where(dict(project_name=datadict['project_name']))
