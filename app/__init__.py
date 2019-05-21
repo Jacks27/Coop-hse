@@ -22,7 +22,7 @@ def create_app(config="development"):
     create_default_admin()
     app.register_blueprint(my_v1, url_prefix='/app/v1')
     app.secret_key= Config.SECRET_KEY
-    app.config['UPLOADED_IMAGES_DEST']='../UI/images'
+    app.config['UPLOADED_IMAGES_DEST']=os.path.join('./uploaded/images')
     images = UploadSet('images', IMAGES)
     configure_uploads(app, images)
        
@@ -73,7 +73,6 @@ def upload_image():
     configure_uploads(app, images)
     if request.method=='POST' and "image" in request.files:
         filename=images.save(request.files['image'])
-        url=images.url(filename)
-        return url
-    return False
-   
+        url_path=images.url(filename)
+        return url_path
+    return False  

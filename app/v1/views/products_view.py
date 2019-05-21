@@ -11,9 +11,9 @@ def createproduct():
     datadict = BaseView.get_jsondata()
     Error= ()
     upload_image= app.upload_image()
-    print("_______________>", upload_image)
+    print("_______________>",datadict)
     if app.upload_image():
-        datadict['image']=upload_image
+        datadict['image']=str(upload_image)
     else:
         Error+=("could not upload the image",)
         res = jsonify({'error': ",".join(Error), 'status': 500})
@@ -29,15 +29,15 @@ def createproduct():
 
     
     pm=ProductsModel(int(services_id), project_name, project_type, size, \
-        county, location, location_info,float(price), other_information,\
+        county, location, location_info, float(price), other_information,\
     image)
     pb=ProductBase()
     pb.where(dict(project_name=datadict['project_name']))
-    if pb.check_exist is True:
+    if pb.check_exist() is True:
         Error+=("Project with the following {} name exists".format(datadict['project_name']),)
     
     pb.where(dict(image=datadict['image']))
-    if pb.check_exist is True:
+    if pb.check_exist()is True:
         Error+=("Image with the following {} details exists".format(datadict['image']),)
     if len(Error)> 0:
         res = jsonify({'error': ",".join(Error), 'status': 400})
@@ -65,6 +65,7 @@ def get_products():
     select_cols= pb.tbl_colomns
     pb.select(select_cols)
     products =pb.get(False)
+    
     res = jsonify({"status": 200,
                    'data': products
                    })

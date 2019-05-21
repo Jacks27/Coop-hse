@@ -42,8 +42,10 @@ def auth_admin(func):
                 if isadmin is True:
                     request.user = payload
                     return func(*args, **kwargs)
-            except (jwt.DecodeError):
-                pass
+            except (jwt.DecodeError, jwt.ExpiredSignatureError):
+                return abort(make_response(jsonify({"status": 400,
+                'error': "your token has expired login and try again"}),
+            400))
         return abort(make_response(jsonify(
             {"status": 400,
                 'error': "You are not authorized to perform this action"}),
