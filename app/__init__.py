@@ -22,7 +22,9 @@ def create_app(config="development"):
     create_default_admin()
     app.register_blueprint(my_v1, url_prefix='/app/v1')
     app.secret_key= Config.SECRET_KEY
-    app.config['UPLOADED_IMAGES_DEST']=os.path.join('./uploaded/images')
+
+    app.config['UPLOADED_IMAGES_DEST']=os.path.join('./images')
+    
     images = UploadSet('images', IMAGES)
     configure_uploads(app, images)
        
