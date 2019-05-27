@@ -36,14 +36,14 @@
 <li class="nav-item" >
     <a class="nav-link text-light  px-3" href="../index.html">Services</a>
     </li>
-    <li class="nav-item  nav-link dropdown bg-green">
-      <a class=" dropdown-toggle" href="#" id="navbarDropdownMenuLink" 
-      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Projects</a>
-      <div class="dropdown-menu bg-green" aria-labelledby="navbarDropdownMenuLink">
-        <a class="nav-link  dropdown-item" href="./lands.html">Land</a>
-        <a class="nav-link  dropdown-item" href="./houses.html">Houses</a>
-
+<li class="nav-item dropdown" data-toggle="dropdown">
+<a class="nav-link text-light px-3 dropdown-toggle" href="#">Projects</a>
+<div class="dropdown-menu">
+<a class="dropdown-item" href="#">Projects 1</a>
+<a class="dropdown-item" href="#">Projects 2</a>
+<a class="dropdown-item" href="#">Projects 3</a>
 </div>
+</li>
 <li class="nav-item">
 <a class="nav-link text-light px-3" href="./about_us.html">About Us</a>
 </li>
@@ -55,18 +55,16 @@
 </ul>
 <!-- right bar -->
 <div class="topnav-right">
-
-  <div class="topnav-right">
-
-    <a href='#contact'>
-        <i class="far fa-envelope"></i> coopbankhousing@co-opbank.co.ke
-      <br>
-      <i class="fas fa-phone-volume"></i> 0711049936</a>
-      <a href="#" class="twitter"><i class="fab fa-twitter"></i></i></a>
-      <a href="#" class="facebook"><i class="fab fa-facebook-square"></i></a>
-      <a href="./login.html">login <i class="fas fa-users"></i></a>
+        <a href="#" class="twitter"><i class="fab fa-twitter"></i></i></a>
+        <a href="#" class="facebook"><i class="fab fa-facebook-square"></i></a>
+        <a href="#" class="instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="google-plus"><i class="fab fa-google-plus"></i></a>
+        <a href="#" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+      
+        <a href="#">login <i class="fas fa-users"></i></a>
   
-    </div>
+      </div>
+
 </div>
 </nav>
 
@@ -87,69 +85,63 @@
           <input type="button" class="form-control btn-success" value="login">
           
       </form>
-      <div ><a href="./signup.html" style="color:black;">Sign Up</a> | <a href="./recover_password.html"style="color:black;" >Forgot Password ?</a></div>
+      <div><a href="#" >Forgot Password ?</a></div>
 </div>
-
-
-      
-  
     </div>
   </section>
  
 </section><!-- #contact -->
 <footer id="footer">
-    <div class="footer-top">
-      <div class="container">
-        <div class="row">
-
-          <div class="col-lg-4 col-md-6 footer-info">
-            <h3>Co-operative Bank Housing Co-operative Society Ltd</h3>
-            <p>We mobilization of funds to provide affordable housing and investment opportunities to our members.</p>
-          </div>
-
-          <div class="col-lg-4 col-md-6 footer-links">
-            <h4>Useful Links</h4>
-            <h4>Useful Links</h4>
-                  <ul>
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="./about_us.html">About us</a></li>
-                    <li><a href="../index.html">Services</a></li>
-                    <li><a href="./faqs.html">FQS</a></li>
-            
-                  </ul>
-            </ul>
-          </div>
-          <div class="col-lg-4 col-md-6 footer-contact">
-            <h4>Contact Us</h4>
-            <p>
-                    <b>Main office</b>:
-                    Co-operative house 2rd Floor - Nairobi<br>
-              <strong>Phone:</strong>0711049124<br>
-              <strong>Email:</strong> coopbankhousing@co-opbank.co.ke<br>
-            </p>
-
-          </div>
-
-        </div>
-      </div>
-    </div>
-
+  <div class="footer-top">
     <div class="container">
-        <div class="copyright">
-          &copy; Copyright <strong>Co-operative Bank Housing Co-operative Society Ltd</strong>. All Rights Reserved
+      <div class="row">
+
+        <div class="col-lg-4 col-md-6 footer-info">
+          <h3>Co-operative Bank Housing Co-operative Society Ltd</h3>
+          <p>We mobilization of funds to provide affordable housing and investment opportunities to our members.</p>
         </div>
+
+        <div class="col-lg-4 col-md-6 footer-links">
+          <h4>Useful Links</h4>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="./templates/about_us.html">About us</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="./templates/faqs.html">FQS</a></li>
+    
+          </ul>
+        </div>
+
+        <div class="col-lg-4 col-md-6 footer-contact">
+          <h4>Contact Us</h4>
+          <p>
+                  <b>Main office</b>:
+                  Co-operative house 2rd Floor - Nairobi<br>
+            <strong>Phone:</strong>0711049936<br>
+            <strong>Email:</strong> coopbankhousing@co-opbank.co.ke<br>
+          </p>
+
+        </div>
+
       </div>
     </div>
-  </footer><!-- #footer -->
+  </div>
 
-  <a href="#" class="back-to-top"><p><i class="fas fa-long-arrow-alt-up"></i></p></a>
+  <div class="container">
+    <div class="copyright">
+      &copy; Copyright <strong>Co-Oparative Bank housing</strong>. All Rights Reserved
+    </div>
+  </div>
+</footer><!-- #footer -->
+
+<a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
 <script src="../js/wow.min.js"></script>
 <script src="../js/base.js"></script>
 <script src="../lib/counterup/jquery.counterup.min.js"></script>
-<script src="../lib/waypoints/jquery.waypoints.min.js">s</script>
+<script src="../lib/waypoints/jquery.waypoints.min.js"></script>
 <script> 
 new WOW().init();
 
 </script>
 </body>
-</html>
+</html>=s
